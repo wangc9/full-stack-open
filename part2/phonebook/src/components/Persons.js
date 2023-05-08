@@ -1,14 +1,16 @@
-import React from 'react'
+const Persons = ({ personOnDisplay, deletePerson }) => {
+  return (
+    <div>
+      {personOnDisplay.map((person) => (
+        <div key={person.name}>
+          {person.name} {person.number}{" "}
+          <button onClick={() => deletePerson(person.id, person.name)}>
+            delete
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+};
 
-const Persons = ({ filterPerson }) => {
-    return (
-        filterPerson.map((e, i) =>
-            <tr key={i}>
-                <td>{e.name}</td>
-                <td>{e.number}</td>
-            </tr>
-        )
-    )
-}
-
-export default Persons
+export default Persons;
