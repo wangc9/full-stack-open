@@ -32,8 +32,26 @@ app.get("/api/persons", (request, response) => {
 
 app.get("/api/person/:id", (request, response) => {
     const id = Number(request.params.id);
-    const person = persons.find((entry) => entry.id === id)
+    const person = persons.find((entry) => entry.id === id);
     person ? response.json(person) : response.status(404).end();
+});
+
+app.post("/api/persons", (request, response) => {
+    let id = 0;
+    while (true) {
+        id = Math.floor(Math.random() * 100000000);
+        let person = persons.find((entry) => entry.id === id);
+        if (person) {
+            continue;
+        } else {
+            break;
+        }
+    }
+    const newPerson = request.body;
+    newPerson.id = id;
+    console.log(`new person entry: ${newPerson.name}, ${newPerson.number}`);
+    persons = persons.concat(newPerson);
+    response.json(newPerson);
 });
 
 app.delete("/api/person/:id", (request, response) => {
