@@ -1,0 +1,30 @@
+{
+  "name": "phonebook",
+  "version": "1.0.0",
+  "description": "Backend implementation of Phonebook",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangc9/fso_part3.git"
+  },
+  "keywords": [
+    "phonebook"
+  ],
+  "author": "Chen Wang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wangc9/fso_part3/issues"
+  },
+  "homepage": "https://github.com/wangc9/fso_part3#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
