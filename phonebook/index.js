@@ -38,20 +38,31 @@ app.get("/api/person/:id", (request, response) => {
 
 app.post("/api/persons", (request, response) => {
     let id = 0;
-    while (true) {
-        id = Math.floor(Math.random() * 100000000);
-        let person = persons.find((entry) => entry.id === id);
-        if (person) {
-            continue;
-        } else {
-            break;
-        }
-    }
     const newPerson = request.body;
-    newPerson.id = id;
-    console.log(`new person entry: ${newPerson.name}, ${newPerson.number}`);
-    persons = persons.concat(newPerson);
-    response.json(newPerson);
+    if (!newPerson.name) {
+        return response.status(400).json({
+            error: 'name is missing'
+        })
+    } else if (!newPerson.number) {
+        return response.status(400).json({
+            error: 'number is missing'
+        })
+    } else if (persons.find((entry) => entry.name === newPerson.name)) {
+        return response.status(400).json({
+            error: 'name must be unique'
+        })
+    } else {
+        while (true) {
+            id = Math.floor(Math.random() * 100000000);
+            if (!persons.find((entry) => entry.id === id)) {
+                break;
+            }
+        }
+        newPerson.id = id;
+        console.log(`new person entry: ${newPerson.name}, ${newPerson.number}`);
+        persons = persons.concat(newPerson);
+        response.json(newPerson);
+    }
 });
 
 app.delete("/api/person/:id", (request, response) => {
