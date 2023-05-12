@@ -36,6 +36,12 @@ app.get("/api/person/:id", (request, response) => {
     person ? response.json(person) : response.status(404).end();
 });
 
+app.delete("/api/person/:id", (request, response) => {
+    const id = Number(request.params.id);
+    persons = persons.filter(entry => entry.id !== id);
+    response.status(204).end();
+});
+
 app.get("/info", (request, response) => {
     const total = persons.reduce((count, people) => {
         if (people.id) count ++;
