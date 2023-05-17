@@ -1,6 +1,6 @@
 const Notification = ({ message }) => {
     if (message === null) return null;
-    else if (message.includes("Information")) {
+    else if (message.includes("failed")) {
         return <div className="e-msg">{message}</div>;
     }
 

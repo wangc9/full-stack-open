@@ -44,7 +44,7 @@ const App = () => {
           setPersonOnDisplay(persons.concat(returnedPerson));
           setMessage(`Added ${newPerson.name} to phonebook`);
         })
-        .catch((error) => setMessage(`Encountered trouble when adding ${newPerson.name} to the server`));
+        .catch((error) => setMessage(error.response.data.error));
     } else {
       if (
         window.confirm(
