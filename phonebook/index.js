@@ -45,12 +45,14 @@ app.post("/api/persons", (request, response) => {
         });
     }
 });
-//
-// app.delete("/api/person/:id", (request, response) => {
-//     const id = Number(request.params.id);
-//     persons = persons.filter(entry => entry.id !== id);
-//     response.status(204).end();
-// });
+
+app.delete("/api/person/:id", (request, response) => {
+    Person.findByIdAndDelete(request.params.id)
+        .then(result => {
+            response.status(204).end();
+        })
+        .catch(error => next(error));
+});
 //
 // app.get("/info", (request, response) => {
 //     const total = persons.reduce((count, people) => {
