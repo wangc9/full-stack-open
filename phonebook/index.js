@@ -19,7 +19,7 @@ app.get("/api/persons", (request, response) => {
     });
 });
 
-app.get("/api/person/:id", (request, response) => {
+app.get("/api/persons/:id", (request, response) => {
     Person.findById(request.params.id)
         .then((person) => {
         if (person) {
@@ -52,7 +52,7 @@ app.post("/api/persons", (request, response) => {
     }
 });
 
-app.put("/api/person/:id", (request, response, next) => {
+app.put("/api/persons/:id", (request, response, next) => {
     const record = request.body;
     const person = {
         name: record.name,
@@ -65,22 +65,20 @@ app.put("/api/person/:id", (request, response, next) => {
         .catch(error => next(error));
 });
 
-app.delete("/api/person/:id", (request, response) => {
+app.delete("/api/persons/:id", (request, response) => {
     Person.findByIdAndDelete(request.params.id)
         .then(result => {
             response.status(204).end();
         })
         .catch(error => next(error));
 });
-//
-// app.get("/info", (request, response) => {
-//     const total = persons.reduce((count, people) => {
-//         if (people.id) count ++;
-//         return count
-//     }, 0);
-//
-//     response.send(`<p>Phonebook has info for ${total} people\t</p><p>${new Date()}</p>`);
-// });
+
+app.get("/info", (request, response) => {
+    Person.countDocuments({})
+        .then(count => {
+        response.send(`<p>Phonebook has info for ${count} people\t</p><p>${new Date()}</p>`);
+    })
+});
 
 const errorHandler = (error, request, response, next) => {
     console.error(error.message);
