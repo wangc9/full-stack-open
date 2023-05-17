@@ -20,9 +20,15 @@ app.get("/api/persons", (request, response) => {
 });
 
 app.get("/api/person/:id", (request, response) => {
-    Person.findById(request.params.id).then((person) => {
-        person ? response.json(person) : response.status(404).end();
-    });
+    Person.findById(request.params.id)
+        .then((person) => {
+        if (person) {
+            response.json(person);
+        } else {
+            response.status(404).end();
+        }
+    })
+        .catch(error => next(error));
 });
 
 app.post("/api/persons", (request, response) => {
@@ -62,6 +68,16 @@ app.delete("/api/person/:id", (request, response) => {
 //
 //     response.send(`<p>Phonebook has info for ${total} people\t</p><p>${new Date()}</p>`);
 // });
+
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message);
+    if (error.name === "CastError") {
+        return response.status(400).send({ error: "malformatted id" });
+    }
+    next(error);
+};
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
