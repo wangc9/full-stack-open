@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "https://fso-charles-phonebook.fly.dev/api/persons";
+const baseUrl = "/api/persons";
 
 const getAll = () => {
   const request = axios.get(baseUrl);
@@ -12,12 +12,12 @@ const create = (newObject) => {
 };
 
 const remove = (id) => {
-  const request = axios.delete(`https://fso-charles-phonebook.fly.dev/api/person/${id}`);
+  const request = axios.delete(`/api/person/${id}`);
   return request.then((response) => response);
 };
 
 const update = (id, newObject) => {
-  const request = axios.put(`https://fso-charles-phonebook.fly.dev/api/person/${id}`, newObject);
+  const request = axios.put(`/api/person/${id}`, newObject);
   return request.then((response) => response.data);
 };
 
