@@ -1,12 +1,7 @@
 const mongoose = require("mongoose");
 
-if (process.argv.length < 3) {
-    console.log("Please input the password, exiting...");
-    process.exit(1);
-}
-
 const url = process.env.MONGODB_URI;
-console.log(`connecting to ${url}`);
+console.log(`connecting to database`);
 
 mongoose.set('strictQuery', false);
 mongoose.connect(url)

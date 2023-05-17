@@ -25,34 +25,26 @@ app.get("/api/person/:id", (request, response) => {
     });
 });
 
-// app.post("/api/persons", (request, response) => {
-//     let id = 0;
-//     const newPerson = request.body;
-//     if (!newPerson.name) {
-//         return response.status(400).json({
-//             error: 'name is missing'
-//         })
-//     } else if (!newPerson.number) {
-//         return response.status(400).json({
-//             error: 'number is missing'
-//         })
-//     } else if (persons.find((entry) => entry.name === newPerson.name)) {
-//         return response.status(400).json({
-//             error: 'name must be unique'
-//         })
-//     } else {
-//         while (true) {
-//             id = Math.floor(Math.random() * 100000000);
-//             if (!persons.find((entry) => entry.id === id)) {
-//                 break;
-//             }
-//         }
-//         newPerson.id = id;
-//         // console.log(`new person entry: ${newPerson.name}, ${newPerson.number}`);
-//         persons = persons.concat(newPerson);
-//         response.json(newPerson);
-//     }
-// });
+app.post("/api/persons", (request, response) => {
+    const newPerson = request.body;
+    if (newPerson.name === undefined) {
+        return response.status(400).json({
+            error: 'name is missing'
+        })
+    } else if (newPerson.number === undefined) {
+        return response.status(400).json({
+            error: 'number is missing'
+        })
+    } else {
+        const person = new Person({
+            name: newPerson.name,
+            number: newPerson.number,
+        });
+        person.save().then(savedPerson => {
+            response.json(savedPerson);
+        });
+    }
+});
 //
 // app.delete("/api/person/:id", (request, response) => {
 //     const id = Number(request.params.id);
