@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+const countBy = require('lodash/countBy');
+
 // eslint-disable-next-line no-unused-vars
 const dummy = (blogs) => 1;
 
@@ -23,4 +26,17 @@ const favoriteBlog = (blogs) => {
   return result;
 };
 
-module.exports = { dummy, totalLikes, favoriteBlog };
+const mostBlogs = (blogs) => {
+  const authorCount = countBy(blogs, 'author');
+  const result = Object.keys(authorCount)
+    .reduce((a, b) => (authorCount[a] > authorCount[b] ? a : b));
+
+  return {
+    author: result,
+    blogs: authorCount[result],
+  };
+};
+
+module.exports = {
+  dummy, totalLikes, favoriteBlog, mostBlogs,
+};
