@@ -76,3 +76,33 @@ test('blog has 0 as default for likes', async () => {
   // eslint-disable-next-line no-undef
   expect(lastBlog.likes).toEqual(0);
 });
+
+// eslint-disable-next-line no-undef
+test('blog must has title and url', async () => {
+  const testBlog1 = {
+    author: 'test',
+    url: 'test',
+  };
+  const testBlog2 = {
+    title: 'test',
+    author: 'test',
+  };
+  const testBlog3 = {
+    author: 'test',
+  };
+
+  await api.post('/api/blogs').send(testBlog1).expect(400);
+
+  await api.post('/api/blogs').send(testBlog2).expect(400);
+
+  await api.post('/api/blogs').send(testBlog3).expect(400);
+
+  const blogs = await helper.blogsInDb();
+  // eslint-disable-next-line no-undef
+  expect(blogs).toHaveLength(helper.initialBlogs.length);
+});
+
+// eslint-disable-next-line no-undef
+afterAll(async () => {
+  await mongoose.connection.close();
+});
