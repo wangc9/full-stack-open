@@ -126,6 +126,32 @@ describe('deletion of a blog', () => {
 });
 
 // eslint-disable-next-line no-undef
+describe('update of a blog', () => {
+  // eslint-disable-next-line no-undef
+  test('succeeds with status 200 and new content if id is valid', async () => {
+    const defaultBlogs = await helper.blogsInDb();
+    const blogToUpdate = defaultBlogs[0];
+
+    const newBlog = {
+      title: 'new title',
+      author: 'new author',
+      url: 'new url',
+      likes: 10000,
+    };
+
+    await api.put(`/api/blogs/${blogToUpdate.id}`).send(newBlog).expect(200);
+
+    const updatedBlogs = await helper.blogsInDb();
+    const temp = new Blog(newBlog).toJSON();
+    delete temp.id;
+    // eslint-disable-next-line no-param-reassign
+    updatedBlogs.forEach((blog) => delete blog.id);
+    // eslint-disable-next-line no-undef
+    expect(updatedBlogs).toContainEqual(temp);
+  });
+});
+
+// eslint-disable-next-line no-undef
 afterAll(async () => {
   await mongoose.connection.close();
 });
