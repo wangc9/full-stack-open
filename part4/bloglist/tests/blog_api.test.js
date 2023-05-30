@@ -57,3 +57,22 @@ test('blogs are correctly added to database', async () => {
   // eslint-disable-next-line no-undef
   expect(blogs).toContainEqual(testObject);
 });
+
+// eslint-disable-next-line no-undef
+test('blog has 0 as default for likes', async () => {
+  const testBlog = {
+    title: 'test',
+    author: 'test',
+    url: 'test',
+  };
+
+  await api.post('/api/blogs')
+    .send(testBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/);
+
+  const blogs = await helper.blogsInDb();
+  const lastBlog = blogs.pop();
+  // eslint-disable-next-line no-undef
+  expect(lastBlog.likes).toEqual(0);
+});
