@@ -15,8 +15,19 @@ beforeEach(async () => {
 });
 
 // eslint-disable-next-line no-undef
-test('notes returned hace the correct amount', async () => {
+test('blogs returned have the correct amount', async () => {
   const response = await api.get('/api/blogs');
   // eslint-disable-next-line no-undef
   expect(response.body).toHaveLength(helper.initialBlogs.length);
+});
+
+// eslint-disable-next-line no-undef
+test('blogs have correct id property', async () => {
+  const response = await api.get('/api/blogs');
+  const tests = response.body.map((entry) => entry.id);
+  // eslint-disable-next-line no-restricted-syntax
+  for (const id of tests) {
+    // eslint-disable-next-line no-undef
+    expect(id).toBeDefined();
+  }
 });
