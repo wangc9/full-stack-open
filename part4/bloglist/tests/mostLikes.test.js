@@ -55,12 +55,12 @@ describe('total likes', () => {
 
   // eslint-disable-next-line no-undef
   test(
-    'when list has multiple blogs, equals the author with the most blogs',
+    'when list has multiple blogs, equals the author with the most likes',
     () => {
-      const result = listHelper.mostBlogs(listOfBlogs);
+      const result = listHelper.mostLikes(listOfBlogs);
       const expected = {
-        author: 'Robert C. Martin',
-        blogs: 3,
+        author: 'Edsger W. Dijkstra',
+        likes: 17,
       };
         // eslint-disable-next-line no-undef
       expect(result).toEqual(expected);

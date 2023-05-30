@@ -1,5 +1,6 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
+const lodash = require('lodash');
 const countBy = require('lodash/countBy');
+const sumBy = require('lodash/sumBy');
 
 // eslint-disable-next-line no-unused-vars
 const dummy = (blogs) => 1;
@@ -37,6 +38,15 @@ const mostBlogs = (blogs) => {
   };
 };
 
+const mostLikes = (blogs) => {
+  const likeCount = lodash(blogs).groupBy('author').map((obj, key) => ({
+    author: key,
+    likes: sumBy(obj, 'likes'),
+  })).value();
+
+  return likeCount.reduce((a, b) => (a.likes > b.likes ? a : b));
+};
+
 module.exports = {
-  dummy, totalLikes, favoriteBlog, mostBlogs,
+  dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes,
 };
