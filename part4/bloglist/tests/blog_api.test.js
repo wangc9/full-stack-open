@@ -31,3 +31,29 @@ test('blogs have correct id property', async () => {
     expect(id).toBeDefined();
   }
 });
+
+// eslint-disable-next-line no-undef
+test('blogs are correctly added to database', async () => {
+  const testBlog = {
+    title: 'test',
+    author: 'test',
+    url: 'test',
+    likes: 0,
+  };
+
+  const testObject = new Blog(testBlog).toJSON();
+  delete testObject.id;
+
+  await api.post('/api/blogs')
+    .send(testBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/);
+
+  const blogs = await helper.blogsInDb();
+  // eslint-disable-next-line no-param-reassign
+  blogs.forEach((blog) => delete blog.id);
+  // eslint-disable-next-line no-undef
+  expect(blogs).toHaveLength(helper.initialBlogs.length + 1);
+  // eslint-disable-next-line no-undef
+  expect(blogs).toContainEqual(testObject);
+});
