@@ -1,5 +1,3 @@
-/* eslint no-param-reassign: 0 */
-/* eslint no-undef: 0 */
 const mongoose = require('mongoose');
 const supertest = require('supertest');
 const bcrypt = require('bcrypt');

@@ -75,7 +75,6 @@ const nonExistingId = async () => {
   await blog.save();
   await blog.deleteOne();
 
-  // eslint-disable-next-line no-underscore-dangle
   return blog._id.toString();
 };
 
