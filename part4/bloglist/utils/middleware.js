@@ -12,6 +12,15 @@ const unknownEndpoint = (request, response) => {
   request.status(404).send({ error: 'unknown endpoint' });
 };
 
+const tokenExtractor = (request, response, next) => {
+  const authorisation = request.get('authorization');
+  if (authorisation && authorisation.startsWith('Bearer ')) {
+    request.token = authorisation.replace('Bearer ', '');
+  }
+
+  next();
+};
+
 // eslint-disable-next-line consistent-return
 const errorHandler = (error, request, response, next) => {
   logger.error(error.message);
@@ -30,4 +39,6 @@ const errorHandler = (error, request, response, next) => {
   next(error);
 };
 
-module.exports = { requestLogger, unknownEndpoint, errorHandler };
+module.exports = {
+  requestLogger, unknownEndpoint, tokenExtractor, errorHandler,
+};
