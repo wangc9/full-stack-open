@@ -19,7 +19,7 @@ describe('when there is initially one user in database', () => {
     await user.save();
   });
 
-  test('creation succeeds with a new user', async () => {
+  test('creation succeeds with a new legitimate user', async () => {
     const initialUser = await helper.usersInDb();
 
     const newUser = {
@@ -40,6 +40,74 @@ describe('when there is initially one user in database', () => {
     delete temp.id;
     currentUsers.forEach((user) => delete user.id);
     expect(currentUsers).toContainEqual(temp);
+  });
+
+  test('error occur when no username is given', async () => {
+    const initialUser = await helper.usersInDb();
+
+    const newUser = {
+      name: 'Charles',
+      password: 'InLine',
+    };
+
+    await api.post('/api/users').send(newUser).expect(400);
+
+    const currentUsers = await helper.usersInDb();
+    expect(currentUsers).toHaveLength(initialUser.length);
+  });
+
+  test(
+    'error occur when username is less than 3 characters long or not unique',
+    async () => {
+      const initialUser = await helper.usersInDb();
+
+      const newUser1 = {
+        username: 'ro',
+        name: 'Charles',
+        password: 'InLine',
+      };
+      const newUser2 = {
+        username: 'root',
+        name: 'Charles',
+        password: 'InLine',
+      };
+
+      await api.post('/api/users').send(newUser1).expect(400);
+
+      await api.post('/api/users').send(newUser2).expect(400);
+
+      const currentUsers = await helper.usersInDb();
+      expect(currentUsers).toHaveLength(initialUser.length);
+    },
+  );
+
+  test('error occur when no password is given', async () => {
+    const initialUser = await helper.usersInDb();
+
+    const newUser = {
+      username: 'wangc',
+      name: 'Charles',
+    };
+
+    await api.post('/api/users').send(newUser).expect(400);
+
+    const currentUsers = await helper.usersInDb();
+    expect(currentUsers).toHaveLength(initialUser.length);
+  });
+
+  test('error occur when password is less than 3 characters long', async () => {
+    const initialUser = await helper.usersInDb();
+
+    const newUser = {
+      username: 'wangc',
+      name: 'Charles',
+      password: 'AB',
+    };
+
+    await api.post('/api/users').send(newUser).expect(400);
+
+    const currentUsers = await helper.usersInDb();
+    expect(currentUsers).toHaveLength(initialUser.length);
   });
 
   afterAll(async () => {
