@@ -1,6 +1,3 @@
-/* eslint no-unused-expressions: 0 */
-/* eslint no-underscore-dangle: 0 */
-/* eslint prefer-destructuring: 0 */
 const blogsRouter = require('express').Router();
 const jwt = require('jsonwebtoken');
 const Blog = require('../models/blog');
@@ -16,7 +13,7 @@ blogsRouter.post('/', async (request, response) => {
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token invalid' });
   }
-  const user = await User.findById(decodedToken.id);
+  const user = request.user;
   const body = request.body;
   const blog = new Blog({
     url: body.url,
@@ -38,7 +35,7 @@ blogsRouter.delete('/:id', async (request, response) => {
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token invalid' });
   }
-  const user = await User.findById(decodedToken.id);
+  const user = request.user;
   if (blog.user.toString() === user._id.toString()) {
     await Blog.findByIdAndDelete(request.params.id);
     response.status(204).end();
@@ -53,6 +50,7 @@ blogsRouter.put('/:id', async (request, response) => {
     request.body,
     { new: true, runValidators: true, context: 'query' },
   );
+  // eslint-disable-next-line no-unused-expressions
   updatedBlog
     ? response.status(200).json(updatedBlog.toJSON())
     : response.status(404).end();

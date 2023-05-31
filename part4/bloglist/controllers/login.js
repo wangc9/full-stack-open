@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 const loginRouter = require('express').Router();
 const User = require('../models/user');
 
-// eslint-disable-next-line consistent-return
 loginRouter.post('/', async (request, response) => {
   const { username, password } = request.body;
 
@@ -19,7 +18,6 @@ loginRouter.post('/', async (request, response) => {
   }
   const userForToken = {
     username: user.username,
-    // eslint-disable-next-line no-underscore-dangle
     id: user._id,
   };
   const token = jwt.sign(

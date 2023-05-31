@@ -1,5 +1,3 @@
-/* eslint no-param-reassign: 0 */
-/* eslint no-underscore-dangle: 0 */
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 

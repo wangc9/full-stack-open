@@ -11,5 +11,11 @@ module.exports = {
     ecmaVersion: 'latest',
   },
   rules: {
+    'prefer-destructuring': 0,
+    'no-unused-vars': 0,
+    'consistent-return': 0,
+    'no-param-reassign': 0,
+    'no-underscore-dangle': 0,
+    'no-undef': 0,
   },
 };
