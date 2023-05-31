@@ -1,6 +1,19 @@
 const Blog = require('../models/blog');
 const User = require('../models/user');
 
+const initialUsers = [
+  {
+    username: 'hellas',
+    name: 'Arto Hellas',
+    id: '627bd77f33e418039572306d',
+  },
+  {
+    username: 'mluukkai',
+    name: 'Matti Luukkainen',
+    id: '627bd7b233e4180395723071',
+  },
+];
+
 const initialBlogs = [
   {
     _id: '5a422a851b54a676234d17f7',
@@ -79,5 +92,5 @@ const usersInDb = async () => {
 };
 
 module.exports = {
-  initialBlogs, nonExistingId, blogsInDb, usersInDb,
+  initialBlogs, nonExistingId, blogsInDb, initialUsers, usersInDb,
 };
