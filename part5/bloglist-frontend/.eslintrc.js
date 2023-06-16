@@ -25,5 +25,6 @@ module.exports = {
     'react/button-has-type': 0,
     'react/prop-types': 0,
     'object-shorthand': 0,
+    'react/destructuring-assignment': 0,
   },
 };
