@@ -24,5 +24,6 @@ module.exports = {
     'react/jsx-no-undef': 0,
     'react/button-has-type': 0,
     'react/prop-types': 0,
+    'object-shorthand': 0,
   },
 };

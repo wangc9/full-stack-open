@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import './index.css';
 import Blog from './components/Blog';
 import blogService from './services/blogs';
 import loginService from './services/login';
+import Notification from './components/Notification';
 
 function App() {
   const [blogs, setBlogs] = useState([]);
@@ -12,6 +14,7 @@ function App() {
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
   const [show, setShow] = useState(false);
+  const [message, setMessage] = useState('');
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -23,9 +26,15 @@ function App() {
       setUser(user);
       setUsername('');
       setPassword('');
-      console.log('User logged in successfully');
+      setMessage('User logged in successfully');
+      setTimeout(() => {
+        setMessage('');
+      }, 2000);
     } catch (exception) {
-      console.error('Wrong credentials', exception);
+      setMessage('Wrong username or password!', exception);
+      setTimeout(() => {
+        setMessage('');
+      }, 2000);
     }
   };
 
@@ -33,12 +42,20 @@ function App() {
     event.preventDefault();
     window.localStorage.clear();
     setUser(null);
+    setMessage('User logged out successfully');
+    setTimeout(() => {
+      setMessage('');
+    }, 2000);
   };
 
   const handleCreate = async (event) => {
     event.preventDefault();
     const blog = { title: title, author: author, url: url };
     const response = await blogService.create(blog);
+    setMessage(`A new blog ${title} by ${author} added`);
+    setTimeout(() => {
+      setMessage('');
+    }, 2000);
     setAuthor('');
     setTitle('');
     setUrl('');
@@ -57,6 +74,7 @@ function App() {
     return (
       <div>
         <h2>Log in to application</h2>
+        <Notification message={message} />
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -87,6 +105,7 @@ function App() {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={message} />
       <div>
         {user.name}
         {' '}
