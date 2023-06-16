@@ -8,6 +8,10 @@ function App() {
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [url, setUrl] = useState('');
+  const [show, setShow] = useState(false);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -15,6 +19,7 @@ function App() {
     try {
       const user = await loginService.login({ username, password });
       window.localStorage.setItem('loggedBlogUser', JSON.stringify(user));
+      blogService.setToken(user.token);
       setUser(user);
       setUsername('');
       setPassword('');
@@ -30,13 +35,23 @@ function App() {
     setUser(null);
   };
 
+  const handleCreate = async (event) => {
+    event.preventDefault();
+    const blog = { title: title, author: author, url: url };
+    const response = await blogService.create(blog);
+    setAuthor('');
+    setTitle('');
+    setUrl('');
+    setShow(!show);
+  };
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogUser');
   }, []);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
+  }, [show]);
 
   if (user === null) {
     return (
@@ -77,6 +92,26 @@ function App() {
         {' '}
         logged-in
         <button onClick={handleLogout} type="submit">logout</button>
+      </div>
+      <br />
+      <h2>Create New</h2>
+      <div>
+        title:
+        {' '}
+        <input type="text" name="title" value={title} onChange={({ target }) => setTitle(target.value)} />
+      </div>
+      <div>
+        author:
+        {' '}
+        <input type="text" name="author" value={author} onChange={({ target }) => setAuthor(target.value)} />
+      </div>
+      <div>
+        url:
+        {' '}
+        <input type="URL" name="url" value={url} onChange={({ target }) => setUrl(target.value)} />
+      </div>
+      <div>
+        <button type="submit" onClick={handleCreate}>create</button>
       </div>
       <br />
       {blogs.map((blog) => (
