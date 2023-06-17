@@ -41,3 +41,11 @@ td {
   border: 1px solid gray;
   border-collapse: collapse;
 }
+
+.blog {
+  padding-top: 10px;
+  padding-left: 2px;
+  border: solid;
+  border-width: 1px;
+  margin-bottom: 5px;
+}
