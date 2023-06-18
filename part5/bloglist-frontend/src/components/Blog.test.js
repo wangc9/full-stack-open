@@ -40,4 +40,14 @@ describe('Blog test', () => {
     expect(component.container.querySelector('.detail')).toHaveTextContent(blog.url);
     expect(component.container.querySelector('.detail')).toHaveTextContent(blog.likes);
   });
+
+  test('likeBlog called twice after clicking like button twice', async () => {
+    const viewButton = screen.getByText('view');
+    await user.click(viewButton);
+    const likeButton = screen.getByText('like');
+    await user.click(likeButton);
+    await user.click(likeButton);
+
+    expect(likeBLog.mock.calls).toHaveLength(2);
+  });
 });
