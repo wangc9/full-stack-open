@@ -17,6 +17,10 @@ function BlogForm({
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
 
+  function compareLikes(blog1, blog2) {
+    return blog2.likes - blog1.likes;
+  }
+
   const handleLogout = () => {
     window.localStorage.clear();
     setUser(null);
@@ -72,7 +76,7 @@ function BlogForm({
         </div>
       </Togglable>
       <br />
-      {blogs.map((blog) => (
+      {blogs.sort(compareLikes).map((blog) => (
         <Blog key={blog.id} blog={blog} mainShow={show} setMainShow={setShow} />
       ))}
     </div>
