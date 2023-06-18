@@ -13,6 +13,8 @@ function BlogForm({
   blogs,
   message,
   setMessage,
+  deleteBlog,
+  likeBlog,
 }) {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -78,7 +80,7 @@ function BlogForm({
       </Togglable>
       <br />
       {blogs.sort(compareLikes).map((blog) => (
-        <Blog key={blog.id} blog={blog} mainShow={show} setMainShow={setShow} />
+        <Blog key={blog.id} blog={blog} deleteBlog={deleteBlog} likeBlog={likeBlog} />
       ))}
     </div>
   );

@@ -1,8 +1,6 @@
 import { useState } from 'react';
-import axios from 'axios';
-import blogService from '../services/blogs';
 
-function Blog({ blog, mainShow, setMainShow }) {
+function Blog({ blog, deleteBlog, likeBlog }) {
   const [show, setShow] = useState(false);
   const [name, setName] = useState('view');
   const showWhenVisible = { display: show ? '' : 'none' };
@@ -12,34 +10,29 @@ function Blog({ blog, mainShow, setMainShow }) {
     setName(name === 'view' ? 'hide' : 'view');
   };
 
+  const handleDelete = async () => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      await deleteBlog(blog.id);
+    }
+  };
+
   const handleLike = async () => {
     const newBlog = {
       likes: blog.likes + 1,
     };
-    const response = await axios.put(`/api/blogs/${blog.id}`, newBlog);
-    setMainShow(!mainShow);
-
-    return response.data;
-  };
-
-  const handleDelete = async () => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      const response = await blogService.remove(blog.id);
-      setMainShow(!mainShow);
-      return response;
-    } else {
-      return null;
-    }
+    await likeBlog(blog.id, newBlog);
   };
 
   return (
     <div className="blog">
-      <div>
+      <div className="init">
         {blog.title}
         {' '}
         {blog.author}
         {' '}
         <button onClick={handleClick}>{name}</button>
+      </div>
+      {show && (
         <div style={showWhenVisible}>
           <div>
             {blog.url}
@@ -57,7 +50,7 @@ function Blog({ blog, mainShow, setMainShow }) {
             <button onClick={handleDelete}>remove</button>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

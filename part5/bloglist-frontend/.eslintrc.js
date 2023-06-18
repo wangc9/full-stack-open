@@ -28,5 +28,6 @@ module.exports = {
     'react/destructuring-assignment': 0,
     'no-else-return': 0,
     'react/forbid-prop-types': 0,
+    'no-undef': 0,
   },
 };
