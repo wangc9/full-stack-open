@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 import Notification from './Notification';
 import Blog from './Blog';
 import Togglable from './Togglable';
@@ -82,5 +83,15 @@ function BlogForm({
     </div>
   );
 }
+
+BlogForm.prototype = {
+  user: PropTypes.string.isRequired,
+  setUser: PropTypes.func.isRequired,
+  show: PropTypes.string.isRequired,
+  setShow: PropTypes.func.isRequired,
+  blogs: PropTypes.array.isRequired,
+  message: PropTypes.string.isRequired,
+  setMessage: PropTypes.func.isRequired,
+};
 
 export default BlogForm;
