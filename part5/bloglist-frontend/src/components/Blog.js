@@ -33,7 +33,7 @@ function Blog({ blog, deleteBlog, likeBlog }) {
         <button onClick={handleClick}>{name}</button>
       </div>
       {show && (
-        <div style={showWhenVisible}>
+        <div style={showWhenVisible} className="detail">
           <div>
             {blog.url}
           </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import Blog from './Blog';
 
 describe('Blog test', () => {
@@ -17,6 +18,7 @@ describe('Blog test', () => {
       name: 'test',
     },
   };
+  const user = userEvent.setup();
 
   beforeEach(() => {
     component = render(
@@ -29,5 +31,13 @@ describe('Blog test', () => {
     expect(component.container.querySelector('.init')).toHaveTextContent(blog.author);
     expect(component.queryByText(blog.url)).not.toBeInTheDocument();
     expect(component.queryByText('like')).not.toBeInTheDocument();
+  });
+
+  test('show url and like after clicking button', async () => {
+    const button = screen.getByText('view');
+    await user.click(button);
+
+    expect(component.container.querySelector('.detail')).toHaveTextContent(blog.url);
+    expect(component.container.querySelector('.detail')).toHaveTextContent(blog.likes);
   });
 });
