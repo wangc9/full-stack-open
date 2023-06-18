@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import axios from 'axios';
 
-function Blog({ blog }) {
+function Blog({ blog, mainShow, setMainShow }) {
   const [show, setShow] = useState(false);
   const [name, setName] = useState('view');
   const showWhenVisible = { display: show ? '' : 'none' };
@@ -8,6 +9,16 @@ function Blog({ blog }) {
   const handleClick = () => {
     setShow(!show);
     setName(name === 'view' ? 'hide' : 'view');
+  };
+
+  const handleLike = async () => {
+    const newBlog = {
+      likes: blog.likes + 1,
+    };
+    const response = await axios.put(`/api/blogs/${blog.id}`, newBlog);
+    setMainShow(!mainShow);
+
+    return response.data;
   };
 
   return (
@@ -26,7 +37,7 @@ function Blog({ blog }) {
             likes
             {' '}
             {blog.likes}
-            <button>like</button>
+            <button onClick={handleLike}>like</button>
           </div>
           <div>
             {blog.user.name}

@@ -73,7 +73,7 @@ function BlogForm({
       </Togglable>
       <br />
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} mainShow={show} setMainShow={setShow} />
       ))}
     </div>
   );
