@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import blogService from '../services/blogs';
 
 function Blog({ blog, mainShow, setMainShow }) {
   const [show, setShow] = useState(false);
@@ -19,6 +20,16 @@ function Blog({ blog, mainShow, setMainShow }) {
     setMainShow(!mainShow);
 
     return response.data;
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      const response = await blogService.remove(blog.id);
+      setMainShow(!mainShow);
+      return response;
+    } else {
+      return null;
+    }
   };
 
   return (
@@ -41,6 +52,9 @@ function Blog({ blog, mainShow, setMainShow }) {
           </div>
           <div>
             {blog.user.name}
+          </div>
+          <div>
+            <button onClick={handleDelete}>remove</button>
           </div>
         </div>
       </div>

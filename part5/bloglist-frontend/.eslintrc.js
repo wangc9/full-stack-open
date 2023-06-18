@@ -26,5 +26,6 @@ module.exports = {
     'react/prop-types': 0,
     'object-shorthand': 0,
     'react/destructuring-assignment': 0,
+    'no-else-return': 0,
   },
 };
