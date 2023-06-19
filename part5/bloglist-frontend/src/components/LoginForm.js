@@ -1,38 +1,22 @@
 import { useState } from 'react';
-import Notification from './Notification';
-import loginService from '../services/login';
-import blogService from '../services/blogs';
+import PropTypes from 'prop-types';
+import BlogForm from './BlogForm';
 
-function LoginForm({ setUser, message, setMessage }) {
+function LoginForm({ userLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async (event) => {
     event.preventDefault();
 
-    try {
-      const user = await loginService.login({ username, password });
-      window.localStorage.setItem('loggedBlogUser', JSON.stringify(user));
-      blogService.setToken(user.token);
-      setUser(user);
-      setUsername('');
-      setPassword('');
-      setMessage('User logged in successfully');
-      setTimeout(() => {
-        setMessage('');
-      }, 2000);
-    } catch (exception) {
-      setMessage('Wrong username or password!', exception);
-      setTimeout(() => {
-        setMessage('');
-      }, 2000);
-    }
+    await userLogin(username, password);
+    setUsername('');
+    setPassword('');
   };
 
   return (
     <div>
       <h2>Log in to application</h2>
-      <Notification message={message} />
       <form onSubmit={handleLogin}>
         <div>
           username
@@ -59,5 +43,9 @@ function LoginForm({ setUser, message, setMessage }) {
     </div>
   );
 }
+
+BlogForm.prototype = {
+  userLogin: PropTypes.func.isRequired,
+};
 
 export default LoginForm;
