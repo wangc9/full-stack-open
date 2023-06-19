@@ -19,20 +19,20 @@ function BlogForm({ createBlog }) {
       <div>
         title:
         {' '}
-        <input type="text" name="title" value={title} onChange={({ target }) => setTitle(target.value)} />
+        <input id="title" type="text" name="title" value={title} onChange={({ target }) => setTitle(target.value)} />
       </div>
       <div>
         author:
         {' '}
-        <input type="text" name="author" value={author} onChange={({ target }) => setAuthor(target.value)} />
+        <input id="author" type="text" name="author" value={author} onChange={({ target }) => setAuthor(target.value)} />
       </div>
       <div>
         url:
         {' '}
-        <input type="URL" name="url" value={url} onChange={({ target }) => setUrl(target.value)} />
+        <input id="url" type="URL" name="url" value={url} onChange={({ target }) => setUrl(target.value)} />
       </div>
       <div>
-        <button type="submit" onClick={handleCreate}>create</button>
+        <button id="create-button" type="submit" onClick={handleCreate}>create</button>
       </div>
     </div>
   );

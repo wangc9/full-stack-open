@@ -107,7 +107,7 @@ function App() {
           </div>
 
           <br />
-          <div>
+          <div id="blogs">
             {blogs.sort(compareLikes).map((blog) => (
               <Blog key={blog.id} blog={blog} deleteBlog={deleteBlog} likeBlog={likeBlog} />
             ))}
