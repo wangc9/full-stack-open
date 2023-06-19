@@ -81,5 +81,26 @@ describe('Blog app', function () {
       cy.get('#remove-button').click();
       cy.get('#blogs').should('not.contain', 'test charles');
     });
+
+    it('only user can see delete button', function () {
+      cy.get('#show-button').click();
+      cy.get('#title').type('test');
+      cy.get('#author').type('charles');
+      cy.get('#url').type('https://localhost:7000');
+      cy.get('#create-button').click();
+      cy.get('#logout-button').click();
+      const newUser = {
+        name: 'Charles Wong',
+        username: 'new',
+        password: '123123',
+      };
+      cy.request('POST', 'http://localhost:3003/api/users/', newUser);
+      cy.visit('http://localhost:3000/');
+      cy.get('#username').type('new');
+      cy.get('#password').type('123123');
+      cy.get('#login-button').click();
+      cy.get('#view-button').click();
+      cy.get('.detail').should('not.contain', 'delete');
+    });
   });
 });

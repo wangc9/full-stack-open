@@ -96,7 +96,7 @@ function App() {
             {user.name}
             {' '}
             logged-in
-            <button onClick={handleLogout} type="submit">logout</button>
+            <button id="logout-button" onClick={handleLogout} type="submit">logout</button>
           </div>
           <br />
           <div>
@@ -109,7 +109,13 @@ function App() {
           <br />
           <div id="blogs">
             {blogs.sort(compareLikes).map((blog) => (
-              <Blog key={blog.id} blog={blog} deleteBlog={deleteBlog} likeBlog={likeBlog} />
+              <Blog
+                key={blog.id}
+                user={user}
+                blog={blog}
+                deleteBlog={deleteBlog}
+                likeBlog={likeBlog}
+              />
             ))}
           </div>
         </div>

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
-function Blog({ blog, deleteBlog, likeBlog }) {
+function Blog({
+  user, blog, deleteBlog, likeBlog,
+}) {
   const [show, setShow] = useState(false);
   const [name, setName] = useState('view');
   const showWhenVisible = { display: show ? '' : 'none' };
@@ -46,9 +48,11 @@ function Blog({ blog, deleteBlog, likeBlog }) {
           <div>
             {blog.user.name}
           </div>
+          {user.username === blog.user.username && (
           <div>
             <button id="remove-button" onClick={handleDelete}>remove</button>
           </div>
+          )}
         </div>
       )}
     </div>
