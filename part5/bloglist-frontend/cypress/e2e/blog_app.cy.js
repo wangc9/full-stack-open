@@ -60,5 +60,15 @@ describe('Blog app', function () {
 
       cy.get('#blogs').should('contain', 'test charles');
     });
+
+    it('User can like blogs', function () {
+      cy.get('#show-button').click();
+      cy.get('#title').type('test');
+      cy.get('#author').type('charles');
+      cy.get('#url').type('https://localhost:7000');
+      cy.get('#create-button').click();
+      cy.get('#view-button').click();
+      cy.get('#like-button').click();
+    });
   });
 });

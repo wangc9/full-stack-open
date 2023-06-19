@@ -30,18 +30,18 @@ function Blog({ blog, deleteBlog, likeBlog }) {
         {' '}
         {blog.author}
         {' '}
-        <button onClick={handleClick}>{name}</button>
+        <button id="view-button" onClick={handleClick}>{name}</button>
       </div>
       {show && (
         <div style={showWhenVisible} className="detail">
           <div>
             {blog.url}
           </div>
-          <div>
+          <div id="likes">
             likes
             {' '}
             {blog.likes}
-            <button onClick={handleLike}>like</button>
+            <button id="like-button" onClick={handleLike}>like</button>
           </div>
           <div>
             {blog.user.name}
