@@ -70,5 +70,16 @@ describe('Blog app', function () {
       cy.get('#view-button').click();
       cy.get('#like-button').click();
     });
+
+    it('user can delete blog', function () {
+      cy.get('#show-button').click();
+      cy.get('#title').type('test');
+      cy.get('#author').type('charles');
+      cy.get('#url').type('https://localhost:7000');
+      cy.get('#create-button').click();
+      cy.get('#view-button').click();
+      cy.get('#remove-button').click();
+      cy.get('#blogs').should('not.contain', 'test charles');
+    });
   });
 });

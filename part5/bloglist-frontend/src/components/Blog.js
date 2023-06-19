@@ -47,7 +47,7 @@ function Blog({ blog, deleteBlog, likeBlog }) {
             {blog.user.name}
           </div>
           <div>
-            <button onClick={handleDelete}>remove</button>
+            <button id="remove-button" onClick={handleDelete}>remove</button>
           </div>
         </div>
       )}
