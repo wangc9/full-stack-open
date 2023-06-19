@@ -30,5 +30,6 @@ module.exports = {
     'react/forbid-prop-types': 0,
     'no-undef': 0,
     'arrow-body-style': 0,
+    'prefer-arrow-callback': 0,
   },
 };

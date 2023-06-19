@@ -17,5 +17,6 @@ module.exports = {
     'no-param-reassign': 0,
     'no-underscore-dangle': 0,
     'no-undef': 0,
+    'global-require': 0,
   },
 };
