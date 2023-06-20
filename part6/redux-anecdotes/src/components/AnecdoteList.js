@@ -1,5 +1,9 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {voteAnecdote} from '../reducers/anecdoteReducer';
+import {
+  clearNotification,
+  voteNotification,
+} from '../reducers/notificationReducer';
 
 const Anecdote = ({ anecdote, handleClick }) => {
   return (
@@ -37,7 +41,12 @@ const AnecdoteList = () => {
       {arrayForSort.map(anecdote =>
         <Anecdote
           anecdote={anecdote}
-          handleClick={() => dispatch(voteAnecdote(anecdote.id))}
+          handleClick={async () => {
+            dispatch(voteAnecdote(anecdote.id));
+            dispatch(voteNotification(anecdote.content));
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            dispatch(clearNotification());
+          }}
         />
       )}
     </ul>
