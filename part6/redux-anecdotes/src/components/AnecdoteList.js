@@ -18,7 +18,13 @@ const Anecdote = ({ anecdote, handleClick }) => {
 
 const AnecdoteList = () => {
   const dispatch = useDispatch();
-  const anecdotes = useSelector(state => state);
+  const anecdotes = useSelector(state => {
+    if (state.filter === '') {
+      return state.anecdotes;
+    } else {
+      return state.anecdotes.filter(anecdote => anecdote.content.includes(state.filter));
+    }
+  });
 
   const compareVotes = (anecdote1, anecdote2) => {
     return (anecdote2.votes - anecdote1.votes);
