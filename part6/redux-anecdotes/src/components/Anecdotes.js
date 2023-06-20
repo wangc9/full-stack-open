@@ -20,9 +20,13 @@ const Anecdotes = () => {
   const dispatch = useDispatch();
   const anecdotes = useSelector(state => state);
 
+  const compareVotes = (anecdote1, anecdote2) => {
+    return (anecdote2.votes - anecdote1.votes);
+  };
+
   return (
     <ul>
-      {anecdotes.map(anecdote =>
+      {anecdotes.sort(compareVotes).map(anecdote =>
         <Anecdote
           anecdote={anecdote}
           handleClick={() => dispatch(voteAnecdote(anecdote.id))}
