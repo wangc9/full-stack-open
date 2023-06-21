@@ -10,6 +10,9 @@ const notificationReducer = (state, action) => {
       return `Anecdote '${action.payload}' voted`;
     }
 
+    case 'ERROR': {
+      return `An error occured: Anecdote is too short, must have length 5 or more`;
+    }
     default: {
       return '';
     }
