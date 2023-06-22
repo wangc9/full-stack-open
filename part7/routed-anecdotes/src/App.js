@@ -101,6 +101,11 @@ const CreateNew = (props) => {
           <input name='info' {...info} />
         </div>
         <button type="submit">create</button>
+        <button type="button" onClick={() => {
+          content.onClick();
+          author.onClick();
+          info.onClick();
+        }}>reset</button>
       </form>
     </div>
   );
