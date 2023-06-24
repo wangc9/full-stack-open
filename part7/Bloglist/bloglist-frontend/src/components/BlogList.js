@@ -1,25 +1,43 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Link, useNavigate } from 'react-router-dom';
 import { deleteBlog, likeBlog } from '../reducers/blogReducer';
+import Comment from './Comment';
 
-function Blog({ user, blog, handleLike, handleDelete, showWhenVisible }) {
+export function Blog({ user, blog }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLike = async () => {
+    dispatch(likeBlog(blog));
+  };
+  const handleDelete = async () => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      dispatch(deleteBlog(blog));
+      navigate('/blogs');
+    }
+  };
+
   return (
-    <div style={showWhenVisible} className="detail">
-      <div>{blog.url}</div>
+    <div>
+      <h2>
+        {blog.title} {blog.author}
+      </h2>
+      <Link to={blog.url}>{blog.url}</Link>
       <div id="likes">
         likes {blog.likes}
         <button id="like-button" onClick={handleLike}>
           like
         </button>
       </div>
-      <div>{blog.user.name}</div>
+      added by {blog.user.name}
+      <br />
       {user.username === blog.user.username && (
-        <div>
-          <button id="remove-button" onClick={handleDelete}>
-            remove
-          </button>
-        </div>
+        <button id="delete-button" onClick={handleDelete}>
+          delete
+        </button>
       )}
+      <Comment blog={blog} />
     </div>
   );
 }
@@ -30,38 +48,19 @@ function Blogs({ user, blog }) {
   const [name, setName] = useState('view');
   const showWhenVisible = { display: show ? '' : 'none' };
 
-  const handleClick = () => {
-    setShow(!show);
-    setName(name === 'view' ? 'hide' : 'view');
-  };
-
   const handleDelete = async () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       dispatch(deleteBlog(blog));
     }
   };
 
-  const handleLike = async () => {
-    dispatch(likeBlog(blog));
-  };
-
   return (
     <div className="blog">
       <div className="init">
-        {blog.title} {blog.author}{' '}
-        <button id="view-button" onClick={handleClick}>
-          {name}
-        </button>
+        <Link to={`/blogs/${blog.id}`}>
+          {blog.title} {blog.author}
+        </Link>
       </div>
-      {show && (
-        <Blog
-          user={user}
-          blog={blog}
-          handleLike={handleLike}
-          handleDelete={handleDelete}
-          showWhenVisible={showWhenVisible}
-        />
-      )}
     </div>
   );
 }

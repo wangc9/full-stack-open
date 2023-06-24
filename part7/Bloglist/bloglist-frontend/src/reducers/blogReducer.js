@@ -29,10 +29,16 @@ const blogSlice = createSlice({
 
       return state.filter((blog) => blog.id !== id);
     },
+    updateBlog(state, action) {
+      const updatedBlog = action.payload;
+      return state.map((blog) =>
+        blog.id === updatedBlog.id ? updatedBlog : blog
+      );
+    },
   },
 });
 
-export const { setBlogs, appendBlog, addLike, handleDelete } =
+export const { setBlogs, appendBlog, addLike, handleDelete, updateBlog } =
   blogSlice.actions;
 
 export const initialiseBlogs = () => {
@@ -105,6 +111,20 @@ export const deleteBlog = (blog) => {
           3
         )
       );
+    }
+  };
+};
+
+export const commentBlog = (blog, comment) => {
+  return async (dispatch) => {
+    try {
+      const commentedBlog = await blogService.comment(blog, comment);
+      dispatch(updateBlog(commentedBlog));
+      dispatch(
+        setSuccessNotification('You have made a comment on this blog', 3)
+      );
+    } catch (error) {
+      dispatch(setErrorNotification('Can not make a comment', 3));
     }
   };
 };

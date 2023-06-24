@@ -29,6 +29,15 @@ blogsRouter.post('/', async (request, response) => {
   response.status(201).json(savedBlog.toJSON());
 });
 
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const { comments } = request.body;
+  const blog = await Blog.findById(request.params.id);
+  blog.comments = blog.comments.concat(comments);
+  const updatedBlog = await blog.save();
+  // eslint-disable-next-line no-unused-expressions
+  updatedBlog ? response.status(200).json(updatedBlog.toJSON()) : response.status(404).end();
+});
+
 blogsRouter.delete('/:id', async (request, response) => {
   const blog = await Blog.findById(request.params.id);
   const decodedToken = jwt.verify(request.token, process.env.SECRET);
@@ -38,6 +47,10 @@ blogsRouter.delete('/:id', async (request, response) => {
   const user = request.user;
   if (blog.user.toString() === user._id.toString()) {
     await Blog.findByIdAndDelete(request.params.id);
+    const newBlogs = [...user.blogs];
+    const temp = newBlogs.filter((id) => id.toString() !== request.params.id);
+    user.blogs = temp;
+    await user.save();
     response.status(204).end();
   } else {
     response.status(401).json({ error: 'Only author can delete blogs' });

@@ -43,12 +43,26 @@ const update = async (oldBlog) => {
   return response.data;
 };
 
+const comment = async (oldBlog, comment) => {
+  const updatedBlog = {
+    comments: comment,
+  };
+
+  const response = await axios.post(
+    `${baseUrl}/${oldBlog.id}/comments`,
+    updatedBlog
+  );
+
+  return response.data;
+};
+
 const blogService = {
   getAll,
   create,
   setToken,
   remove,
   update,
+  comment,
 };
 
 export default blogService;
