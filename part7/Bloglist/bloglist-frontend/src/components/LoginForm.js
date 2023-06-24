@@ -1,17 +1,19 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { useField } from '../hooks';
 import BlogForm from './BlogForm';
+import { loginUser } from '../reducers/userReducer';
 
-function LoginForm({ userLogin }) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+function LoginForm() {
+  const username = useField('text', 'username');
+  const password = useField('text', 'password');
+  const dispatch = useDispatch();
 
   const handleLogin = async (event) => {
     event.preventDefault();
-
-    await userLogin(username, password);
-    setUsername('');
-    setPassword('');
+    dispatch(loginUser({ username: username.value, password: password.value }));
+    username.clearValue();
+    password.clearValue();
   };
 
   return (
@@ -21,21 +23,21 @@ function LoginForm({ userLogin }) {
         <div>
           username{' '}
           <input
-            id="username"
-            type="text"
-            name="Username"
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
+            id={username.id}
+            type={username.type}
+            name={username.name}
+            value={username.value}
+            onChange={username.onChange}
           />
         </div>
         <div>
           password{' '}
           <input
-            id="password"
-            type="password"
-            name="Password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
+            id={password.id}
+            type={password.type}
+            name={password.name}
+            value={password.value}
+            onChange={password.onChange}
           />
         </div>
         <button id="login-button" type="submit">
