@@ -2,7 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Blog from './Blog';
+import Blog from './BlogList';
 
 describe('Blog test', () => {
   let component;
@@ -22,13 +22,17 @@ describe('Blog test', () => {
 
   beforeEach(() => {
     component = render(
-      <Blog blog={blog} deleteBlog={deleteBlog} likeBlog={likeBLog} />,
+      <Blog blog={blog} deleteBlog={deleteBlog} likeBlog={likeBLog} />
     );
   });
 
   test('renders content', () => {
-    expect(component.container.querySelector('.init')).toHaveTextContent(blog.title);
-    expect(component.container.querySelector('.init')).toHaveTextContent(blog.author);
+    expect(component.container.querySelector('.init')).toHaveTextContent(
+      blog.title
+    );
+    expect(component.container.querySelector('.init')).toHaveTextContent(
+      blog.author
+    );
     expect(component.queryByText(blog.url)).not.toBeInTheDocument();
     expect(component.queryByText('like')).not.toBeInTheDocument();
   });
@@ -37,8 +41,12 @@ describe('Blog test', () => {
     const button = screen.getByText('view');
     await user.click(button);
 
-    expect(component.container.querySelector('.detail')).toHaveTextContent(blog.url);
-    expect(component.container.querySelector('.detail')).toHaveTextContent(blog.likes);
+    expect(component.container.querySelector('.detail')).toHaveTextContent(
+      blog.url
+    );
+    expect(component.container.querySelector('.detail')).toHaveTextContent(
+      blog.likes
+    );
   });
 
   test('likeBlog called twice after clicking like button twice', async () => {

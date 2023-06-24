@@ -1,49 +1,57 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { useField } from '../hooks';
+import { createBlog } from '../reducers/blogReducer';
 
-function BlogForm({ createBlog }) {
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
+function BlogForm({ user }) {
+  const dispatch = useDispatch();
+  const title = useField('text', 'title');
+  const author = useField('text', 'author');
+  const url = useField('URL', 'url');
 
   const handleCreate = async (event) => {
     event.preventDefault();
-    const blog = { title: title, author: author, url: url };
-    await createBlog(blog);
-    setAuthor('');
-    setTitle('');
-    setUrl('');
+    const blog = {
+      title: title.value,
+      author: author.value,
+      url: url.value,
+      user: user.id,
+    };
+    dispatch(createBlog(blog));
+    title.clearValue();
+    author.clearValue();
+    url.clearValue();
   };
   return (
     <div>
       <div>
         title:{' '}
         <input
-          id="title"
-          type="text"
-          name="title"
-          value={title}
-          onChange={({ target }) => setTitle(target.value)}
+          id={title.id}
+          type={title.type}
+          name={title.name}
+          value={title.value}
+          onChange={title.onChange}
         />
       </div>
       <div>
         author:{' '}
         <input
-          id="author"
-          type="text"
-          name="author"
-          value={author}
-          onChange={({ target }) => setAuthor(target.value)}
+          id={author.id}
+          type={author.type}
+          name={author.name}
+          value={author.value}
+          onChange={author.onChange}
         />
       </div>
       <div>
         url:{' '}
         <input
-          id="url"
-          type="URL"
-          name="url"
-          value={url}
-          onChange={({ target }) => setUrl(target.value)}
+          id={url.id}
+          type={url.type}
+          name={url.name}
+          value={url.value}
+          onChange={url.onChange}
         />
       </div>
       <div>

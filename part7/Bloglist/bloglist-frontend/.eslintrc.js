@@ -26,5 +26,7 @@ module.exports = {
     'no-undef': 0,
     'arrow-body-style': 0,
     'prefer-arrow-callback': 0,
+    'react/jsx-props-no-spreading': 0,
+    'prefer-destructuring': 0,
   },
 };

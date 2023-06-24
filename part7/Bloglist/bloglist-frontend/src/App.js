@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import axios from 'axios';
 import {
   setErrorNotification,
   setSuccessNotification,
 } from './reducers/notificationReducer';
+import { initialiseBlogs } from './reducers/blogReducer';
 import './index.css';
 import blogService from './services/blogs';
 import LoginForm from './components/LoginForm';
@@ -12,13 +12,10 @@ import BlogForm from './components/BlogForm';
 import loginService from './services/login';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
-import Blog from './components/Blog';
+import BlogList from './components/BlogList';
 
 function App() {
-  const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
-  const [show, setShow] = useState(false);
-  const [message, setMessage] = useState('');
 
   const dispatch = useDispatch();
 
@@ -27,8 +24,8 @@ function App() {
   }, []);
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, [show]);
+    dispatch(initialiseBlogs());
+  }, []);
 
   const blogFormRef = useRef();
 
@@ -47,50 +44,10 @@ function App() {
     }
   };
 
-  const createBlog = async (blog) => {
-    blogFormRef.current.toggleVisibility();
-    const response = await blogService.create(blog);
-    dispatch(
-      setSuccessNotification(
-        `A new blog ${blog.title} by ${blog.author} added`,
-        2
-      )
-    );
-    setShow(!show);
-  };
-
   const handleLogout = () => {
     window.localStorage.clear();
     setUser(null);
     dispatch(setSuccessNotification('User logged out successfully', 2));
-  };
-
-  function compareLikes(blog1, blog2) {
-    return blog2.likes - blog1.likes;
-  }
-
-  const deleteBlog = async (id) => {
-    try {
-      const response = await blogService.remove(id);
-      setShow(!show);
-    } catch (exception) {
-      dispatch(setErrorNotification(`${exception.response.data.error}`, 2));
-    }
-  };
-
-  const likeBlog = async (blogId, newBlog) => {
-    try {
-      const response = await axios.put(`/api/blogs/${blogId}`, newBlog);
-      dispatch(
-        setSuccessNotification(
-          `You liked blog ${response.data.title} by ${response.data.author}`,
-          2
-        )
-      );
-      setShow(!show);
-    } catch (exception) {
-      dispatch(setErrorNotification(`${exception.response.data.error}`, 2));
-    }
   };
 
   return (
@@ -111,22 +68,12 @@ function App() {
           <div>
             <h2>Create New</h2>
             <Togglable buttonLabel="create" ref={blogFormRef}>
-              <BlogForm createBlog={createBlog} />
+              <BlogForm user={user} />
             </Togglable>
           </div>
 
           <br />
-          <div id="blogs">
-            {blogs.sort(compareLikes).map((blog) => (
-              <Blog
-                key={blog.id}
-                user={user}
-                blog={blog}
-                deleteBlog={deleteBlog}
-                likeBlog={likeBlog}
-              />
-            ))}
-          </div>
+          <BlogList user={user} />
         </div>
       )}
     </div>

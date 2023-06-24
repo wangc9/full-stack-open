@@ -33,11 +33,22 @@ const remove = async (id) => {
   return response.data;
 };
 
+const update = async (oldBlog) => {
+  const updatedBlog = {
+    likes: oldBlog.likes + 1,
+  };
+
+  const response = await axios.put(`${baseUrl}/${oldBlog.id}`, updatedBlog);
+
+  return response.data;
+};
+
 const blogService = {
   getAll,
   create,
   setToken,
   remove,
+  update,
 };
 
 export default blogService;
