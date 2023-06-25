@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Link, Route, Routes, useMatch } from 'react-router-dom';
+import { AppBar, Button, Container, Toolbar } from '@mui/material';
 import { logoutUser } from './reducers/userReducer';
 import { initialiseBlogs } from './reducers/blogReducer';
 import { registerUsers } from './reducers/usersReducer';
@@ -46,56 +47,80 @@ function App() {
   };
 
   return (
-    <div>
-      <Notification />
-      {user === null ? (
-        <LoginForm />
-      ) : (
-        <div>
+    <Container>
+      <div>
+        <Notification />
+        {user === null ? (
+          <LoginForm />
+        ) : (
           <div>
-            <Link to="/users" style={{ padding: 5 }}>
-              users
-            </Link>
-            <Link to="/blogs" style={{ padding: 5 }}>
-              home
-            </Link>
-          </div>
-          <div>
-            <h2>blogs</h2>
+            <AppBar position="static">
+              <Toolbar>
+                <Button color="inherit" component={Link} to="/users">
+                  <b>users</b>
+                </Button>
+                <Button color="inherit" component={Link} to="/blogs">
+                  <b>home</b>
+                </Button>
+              </Toolbar>
+            </AppBar>
+            {false && (
+              <div>
+                <Link to="/users" style={{ padding: 5 }}>
+                  users
+                </Link>
+                <Link to="/blogs" style={{ padding: 5 }}>
+                  home
+                </Link>
+              </div>
+            )}
             <div>
-              {user.name} logged-in
-              <button id="logout-button" onClick={handleLogout} type="submit">
-                logout
-              </button>
-            </div>
-            <br />
-            <Routes>
-              <Route path="/users" element={<UserList />} />
-              <Route path="/users/:id" element={<User user={userMatch} />} />
-              <Route
-                path="/blogs"
-                element={
-                  <div>
+              <h2>blogs</h2>
+              <div>
+                {user.name} logged-in
+                <br />
+                <Button
+                  id="logout-button"
+                  onClick={handleLogout}
+                  type="button"
+                  variant="contained"
+                  colot="primary"
+                >
+                  <b>logout</b>
+                </Button>
+              </div>
+              <br />
+              <Routes>
+                <Route path="/users" element={<UserList />} />
+                <Route path="/users/:id" element={<User user={userMatch} />} />
+                <Route
+                  path="/blogs"
+                  element={
                     <div>
-                      <h2>Create New</h2>
-                      <Togglable buttonLabel="create" ref={blogFormRef}>
-                        <BlogForm user={user} />
-                      </Togglable>
+                      <div>
+                        <h2>Create New</h2>
+                        <Togglable buttonLabel="create" ref={blogFormRef}>
+                          <BlogForm user={user} />
+                        </Togglable>
+                      </div>
+                      <br />
+                      <BlogList user={user} />
                     </div>
-                    <br />
-                    <BlogList user={user} />
-                  </div>
-                }
-              />
-              <Route
-                path="/blogs/:id"
-                element={<Blog user={user} blog={blogMatch} />}
-              />
-            </Routes>
+                  }
+                />
+                <Route
+                  path="/blogs/:id"
+                  element={<Blog user={user} blog={blogMatch} />}
+                />
+              </Routes>
+            </div>
+            <footer>
+              <i>Blog app, Chen Wang 2023</i>
+            </footer>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </Container>
   );
 }
 

@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { useNavigate } from 'react-router-dom';
+import { Button, TextField } from '@mui/material';
 import { useField } from '../hooks';
 import { commentBlog } from '../reducers/blogReducer';
 
@@ -20,14 +21,22 @@ function Comment({ blog }) {
     <div>
       <h3>comments</h3>
       <form onSubmit={handleSubmit}>
-        <input
+        <TextField
+          label={comment.name}
           id={comment.id}
           value={comment.value}
           name={comment.name}
-          type={comment.type}
           onChange={comment.onChange}
         />
-        <button type="submit">add comment</button>
+        <br />
+        <Button
+          type="submit"
+          id="comment-button"
+          variant="contained"
+          color="primary"
+        >
+          <b>add comment</b>
+        </Button>
       </form>
       <ul>
         {comments.map((comment) => (

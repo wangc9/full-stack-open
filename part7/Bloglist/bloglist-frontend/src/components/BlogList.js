@@ -1,7 +1,16 @@
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Link, useNavigate } from 'react-router-dom';
+import {
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import { deleteBlog, likeBlog } from '../reducers/blogReducer';
 import Comment from './Comment';
 
@@ -25,42 +34,31 @@ export function Blog({ user, blog }) {
       </h2>
       <Link to={blog.url}>{blog.url}</Link>
       <div id="likes">
-        likes {blog.likes}
-        <button id="like-button" onClick={handleLike}>
+        likes {blog.likes}{' '}
+        <Button
+          id="like-button"
+          type="button"
+          variant="contained"
+          color="primary"
+          onClick={handleLike}
+        >
           like
-        </button>
+        </Button>
       </div>
       added by {blog.user.name}
       <br />
       {user.username === blog.user.username && (
-        <button id="delete-button" onClick={handleDelete}>
-          delete
-        </button>
+        <Button
+          id="delete-button"
+          type="button"
+          variant="contained"
+          colot="warning"
+          onClick={handleDelete}
+        >
+          <b>delete</b>
+        </Button>
       )}
       <Comment blog={blog} />
-    </div>
-  );
-}
-
-function Blogs({ user, blog }) {
-  const dispatch = useDispatch();
-  const [show, setShow] = useState(false);
-  const [name, setName] = useState('view');
-  const showWhenVisible = { display: show ? '' : 'none' };
-
-  const handleDelete = async () => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      dispatch(deleteBlog(blog));
-    }
-  };
-
-  return (
-    <div className="blog">
-      <div className="init">
-        <Link to={`/blogs/${blog.id}`}>
-          {blog.title} {blog.author}
-        </Link>
-      </div>
     </div>
   );
 }
@@ -74,11 +72,30 @@ function BlogList({ user }) {
   }
 
   return (
-    <div id="blogs">
-      {sortBlogs.sort(compareLikes).map((blog) => (
-        <Blogs key={blog.id} user={user} blog={blog} />
-      ))}
-    </div>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow key="title">
+            <TableCell>
+              <b>Title</b>
+            </TableCell>
+            <TableCell>
+              <b>Author</b>
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {sortBlogs.sort(compareLikes).map((blog) => (
+            <TableRow key={blog.id}>
+              <TableCell>
+                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+              </TableCell>
+              <TableCell>{blog.author}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }
 

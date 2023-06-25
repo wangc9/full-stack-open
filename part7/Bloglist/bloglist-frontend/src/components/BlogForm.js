@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { Button, TextField } from '@mui/material';
 import { useField } from '../hooks';
 import { createBlog } from '../reducers/blogReducer';
 
@@ -23,43 +24,45 @@ function BlogForm({ user }) {
     url.clearValue();
   };
   return (
-    <div>
+    <form onSubmit={handleCreate}>
       <div>
-        title:{' '}
-        <input
+        <TextField
+          label={title.name}
           id={title.id}
-          type={title.type}
           name={title.name}
           value={title.value}
           onChange={title.onChange}
         />
       </div>
       <div>
-        author:{' '}
-        <input
+        <TextField
+          label={author.name}
           id={author.id}
-          type={author.type}
           name={author.name}
           value={author.value}
           onChange={author.onChange}
         />
       </div>
       <div>
-        url:{' '}
-        <input
+        <TextField
+          label={url.name}
           id={url.id}
-          type={url.type}
           name={url.name}
           value={url.value}
           onChange={url.onChange}
         />
       </div>
       <div>
-        <button id="create-button" type="submit" onClick={handleCreate}>
+        <Button
+          id="create-button"
+          type="submit"
+          variant="contained"
+          color="primary"
+        >
           create
-        </button>
+        </Button>
       </div>
-    </div>
+    </form>
   );
 }
 

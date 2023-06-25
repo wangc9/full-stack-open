@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { Button, TextField } from '@mui/material';
 import { useField } from '../hooks';
 import BlogForm from './BlogForm';
 import { loginUser } from '../reducers/userReducer';
@@ -21,28 +22,31 @@ function LoginForm() {
       <h2>Log in to application</h2>
       <form onSubmit={handleLogin}>
         <div>
-          username{' '}
-          <input
+          <TextField
+            label={username.name}
             id={username.id}
-            type={username.type}
             name={username.name}
             value={username.value}
             onChange={username.onChange}
           />
         </div>
         <div>
-          password{' '}
-          <input
+          <TextField
+            label={password.name}
             id={password.id}
-            type={password.type}
             name={password.name}
             value={password.value}
             onChange={password.onChange}
           />
         </div>
-        <button id="login-button" type="submit">
-          login
-        </button>
+        <Button
+          id="login-button"
+          type="submit"
+          variant="contained"
+          color="primary"
+        >
+          <b>login</b>
+        </Button>
       </form>
     </div>
   );
