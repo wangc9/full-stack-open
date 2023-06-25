@@ -131,6 +131,10 @@ const typeDefs = `
       born: Int
       bookCount: Int
     ): Author
+    editAuthor(
+      name: String!
+      setBornTo: Int!
+    ): Author
   }
 `;
 
@@ -161,7 +165,6 @@ const resolvers = {
     addBook: (root, args) => {
       const book = { ...args, id: uuid() };
       books = books.concat(book);
-      console.log(authors.filter((author) => author.name === args.author))
       if (authors.filter((author) => author.name === args.author).length === 0) {
         const author = {
           name: args.author,
@@ -175,6 +178,14 @@ const resolvers = {
       const author = { ...args, id: uuid() };
       authors = authors.concat(author);
       return author;
+    },
+    editAuthor: (root, args) => {
+      if (authors.filter((author) => author.name === args.name) === 0) {
+        return null;
+      } else {
+        authors =  authors.map((author) => author.name === args.name ? { ...author, born: args.setBornTo }: author);
+        return authors.find((author) => author.name === args.name);
+      }
     }
   }
 };
