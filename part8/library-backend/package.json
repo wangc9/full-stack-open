@@ -1,0 +1,25 @@
+{
+  "name": "library-backend",
+  "version": "1.0.0",
+  "description": "A GraphQL backend for a small library",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangc9/full-stack-open.git"
+  },
+  "author": "Chen Wang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wangc9/full-stack-open/issues"
+  },
+  "homepage": "https://github.com/wangc9/full-stack-open#readme",
+  "dependencies": {
+    "@apollo/server": "^4.7.4",
+    "graphql": "^16.7.1",
+    "uuid": "^9.0.0"
+  }
+}
