@@ -6,7 +6,9 @@ const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 const Author = require('./models/author');
 const Book = require('./models/book');
+const User = require('./models/user');
 require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
 
 const MONGOBD_URI = process.env.MONGODB_URI;
@@ -23,7 +25,9 @@ const typeDefs = `
     authorCount: Int!
     allBooks(author: String = "", genre: String = ""): [Book!]
     allAuthors: [Author!]
+    me: User
   }
+
   type Book {
     title: String!
     published: Int!
@@ -31,12 +35,24 @@ const typeDefs = `
     id: ID!
     genres: [String!]
   }
+
   type Author {
     name: String!
     id: ID!
     born: Int
     bookCount: Int
   }
+
+  type User {
+    username: String!
+    favoriteGenre: String!
+    id: ID!
+  }
+  
+  type Token {
+    value: String!
+  }
+
   type Mutation {
     addBook(
       title: String!
@@ -53,6 +69,14 @@ const typeDefs = `
       name: String!
       setBornTo: Int!
     ): Author
+    createUser(
+      username: String!
+      favoriteGenre: String!
+    ): User
+    login(
+      username: String!
+      password: String!
+    ): Token
   }
 `;
 
@@ -84,13 +108,24 @@ const resolvers = {
         return result;
       }
     },
-    allAuthors: async () => Author.find({})
+    allAuthors: async () => Author.find({}),
+    me: (root, args, context) => {
+      return context.currentUser;
+    }
   },
   Author: {
     bookCount: async (root) => await Book.find({author: root.id}).countDocuments()
   },
   Mutation: {
-    addBook: async (root, args) => {
+    addBook: async (root, args, context) => {
+      const currentUser = context.currentUser;
+      if (!currentUser) {
+        throw new GraphQLError('Not authenticated', {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        });
+      }
       let author = await Author.findOne({name: args.author});
       if (!author) {
         const newAuthor = new Author({
@@ -123,7 +158,15 @@ const resolvers = {
       }
       return book.populate("author");
     },
-    addAuthor: async (root, args) => {
+    addAuthor: async (root, args, context) => {
+      const currentUser = context.currentUser;
+      if (!currentUser) {
+        throw new GraphQLError('Not authenticated', {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        });
+      }
       const author = new Author({ ...args });
       try {
         await author.save();
@@ -138,7 +181,15 @@ const resolvers = {
       }
       return author;
     },
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, context) => {
+      const currentUser = context.currentUser;
+      if (!currentUser) {
+        throw new GraphQLError('Not authenticated', {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        });
+      }
       const author = Author.findOne({name: args.name});
       if (author === null) {
         return null;
@@ -160,6 +211,38 @@ const resolvers = {
           });
         }
       }
+    },
+    createUser: async (root, args) => {
+      const user = new User({ ...args });
+      await user.save().catch(error => {
+        throw new GraphQLError('Creating user failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            error
+          }
+        });
+      });
+      console.log(user);
+      return user;
+    },
+    login: async (root, args) => {
+      const user = await User.findOne({ username: args.username });
+
+      if (!user || args.password !== 'secret') {
+        throw new GraphQLError('Wrong credentials', {
+          extensions: {
+            code: 'BAD_USER_INPUT'
+          }
+        });
+      }
+
+      const userForToken = {
+        username: user.username,
+        id: user._id,
+      };
+
+      return {value: jwt.sign(userForToken, process.env.SECRET)};
     }
   }
 };
@@ -171,6 +254,17 @@ const server = new ApolloServer({
 
 startStandaloneServer(server, {
   listen: { port: 4000 },
+  context: async ({req, res}) => {
+    const auth = req ? req.headers.authorization : null;
+    if (auth && auth.startsWith('bearer ')) {
+      const decodedToken = jwt.verify(
+          auth.substring(7), process.env.SECRET
+      );
+      const currentUser = await User.findById(decodedToken.id)
+
+      return {currentUser};
+    }
+  }
 }).then(({ url }) => {
   console.log(`Server ready at ${url}`)
 });
