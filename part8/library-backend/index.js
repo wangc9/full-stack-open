@@ -96,16 +96,46 @@ const resolvers = {
         const newAuthor = new Author({
           name: args.author
         });
-        await newAuthor.save();
-        author = await Author.findOne({name: args.author});
+        try {
+          await newAuthor.save();
+          author = await Author.findOne({name: args.author});
+        } catch (error) {
+          throw new GraphQLError('Saving new author failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args.author,
+              error
+            }
+          });
+        }
       }
       const book = new Book({ ...args, author: author.id });
-      await book.save();
+      try {
+        await book.save();
+      } catch (error) {
+        throw new GraphQLError('Saving new book failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.title,
+            error
+          }
+        });
+      }
       return book.populate("author");
     },
     addAuthor: async (root, args) => {
       const author = new Author({ ...args });
-      await author.save();
+      try {
+        await author.save();
+      } catch (error) {
+        throw new GraphQLError('Saving new author failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name,
+            error
+          }
+        });
+      }
       return author;
     },
     editAuthor: async (root, args) => {
@@ -113,12 +143,22 @@ const resolvers = {
       if (author === null) {
         return null;
       } else {
-        const updatedAuthor = await Author.findOneAndUpdate(
-          {name: args.name},
-          {born: args.setBornTo},
-          {new: true}
-        );
-        return updatedAuthor;
+        try {
+          const updatedAuthor = await Author.findOneAndUpdate(
+            {name: args.name},
+            {born: args.setBornTo},
+            {new: true}
+          );
+          return updatedAuthor;
+        } catch (error) {
+          throw new GraphQLError('Updating author failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args.name,
+              error
+            }
+          });
+        }
       }
     }
   }
