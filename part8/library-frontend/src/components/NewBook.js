@@ -11,7 +11,7 @@ const NewBook = () => {
   const published = useField('text', 'published');
   const genre = useField('text', 'genre');
   const [genres, setGenres] = useState([]);
-  const [errormsg, setErrormsg] = useState('')
+  const [errormsg, setErrormsg] = useState('');
 
   const [addBook] = useMutation(ADD_BOOK, {
     refetchQueries: [{query: ALL_BOOKS}],
