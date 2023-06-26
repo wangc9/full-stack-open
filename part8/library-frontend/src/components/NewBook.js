@@ -1,69 +1,120 @@
-import { useState } from 'react'
+import {useState} from 'react';
+import {useField} from '../hooks';
+import {useMutation} from '@apollo/client';
+import {ADD_BOOK, ALL_BOOKS} from './queries';
+import {Button, TextField} from '@mui/material';
+import Notification from './Notification';
 
-const NewBook = (props) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [published, setPublished] = useState('')
-  const [genre, setGenre] = useState('')
-  const [genres, setGenres] = useState([])
+const NewBook = () => {
+  const title = useField('text', 'title');
+  const author = useField('text', 'author');
+  const published = useField('text', 'published');
+  const genre = useField('text', 'genre');
+  const [genres, setGenres] = useState([]);
+  const [errormsg, setErrormsg] = useState('')
 
-  if (!props.show) {
-    return null
-  }
+  const [addBook] = useMutation(ADD_BOOK, {
+    refetchQueries: [{query: ALL_BOOKS}],
+    onError: (error) => {
+      const errors = error.graphQLErrors[0].extensions.error.errors;
+      const message = Object.values(errors).map(e => e.message).join('/n');
+      setErrormsg(`Error: ${message}`);
+      setTimeout(() => {setErrormsg('')}, 3000);
+    }
+  })
 
   const submit = async (event) => {
     event.preventDefault()
 
     console.log('add book...')
+    addBook({
+      variables: {
+        title: title.value,
+        author: author.value,
+        published: Number(published.value),
+        genres
+      }
+    });
 
-    setTitle('')
-    setPublished('')
-    setAuthor('')
+    setErrormsg(`SUCCESS: You have added a book ${title.value} by ${author.value}`);
+    title.clearValue();
+    author.clearValue();
+    published.clearValue();
     setGenres([])
-    setGenre('')
+    genre.clearValue();
+    setTimeout(() => {setErrormsg('')}, 3000);
   }
 
   const addGenre = () => {
-    setGenres(genres.concat(genre))
-    setGenre('')
-  }
+    setGenres(genres.concat(genre.value));
+    genre.clearValue();
+  };
 
   return (
     <div>
+      {errormsg !== '' && (<Notification message={errormsg} />)}
+      <br />
       <form onSubmit={submit}>
         <div>
-          title
-          <input
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
+          <TextField
+            label={title.name}
+            id={title.id}
+            name={title.name}
+            value={title.value}
+            onChange={title.onChange}
           />
         </div>
+        <br />
         <div>
-          author
-          <input
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
+          <TextField
+            label={author.name}
+            id={author.id}
+            name={author.name}
+            value={author.value}
+            onChange={author.onChange}
           />
         </div>
+        <br />
         <div>
-          published
-          <input
-            type="number"
-            value={published}
-            onChange={({ target }) => setPublished(target.value)}
+          <TextField
+            label={published.name}
+            id={published.id}
+            name={published.name}
+            value={published.value}
+            onChange={published.onChange}
           />
         </div>
+        <br />
         <div>
-          <input
-            value={genre}
-            onChange={({ target }) => setGenre(target.value)}
+          <TextField
+            label={genre.name}
+            id={genre.id}
+            name={genre.name}
+            value={genre.value}
+            onChange={genre.onChange}
           />
-          <button onClick={addGenre} type="button">
-            add genre
-          </button>
+          {' '}
+          <Button
+              onClick={addGenre}
+              type="button"
+              id="genre-button"
+              variant="contained"
+              color="primary"
+          >
+            <b>add genre</b>
+          </Button>
         </div>
+        <br />
         <div>genres: {genres.join(' ')}</div>
-        <button type="submit">create book</button>
+        <br />
+        <Button
+            type="submit"
+            id="create-button"
+            variant="contained"
+            color="primary"
+        >
+          <b>create book</b>
+        </Button>
       </form>
     </div>
   )
