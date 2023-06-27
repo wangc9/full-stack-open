@@ -14,11 +14,10 @@ const NewBook = () => {
   const [errormsg, setErrormsg] = useState('');
 
   const [addBook] = useMutation(ADD_BOOK, {
-    refetchQueries: [{query: ALL_BOOKS}],
     onError: (error) => {
       error.graphQLErrors > 0 ? setErrormsg(`Error: ${error.graphQLErrors[0].message}`) : setErrormsg(`Error: ${error.message}`);
       setTimeout(() => {setErrormsg('')}, 3000);
-    }
+    },
   })
 
   const submit = async (event) => {
@@ -31,7 +30,30 @@ const NewBook = () => {
         author: author.value,
         published: Number(published.value),
         genres
-      }
+      },
+      refetchQueries: [{query: ALL_BOOKS}],
+      update: (store, response) => {
+        genres.forEach((genre) => {
+          try {
+            const dataInStore = store.readQuery({
+              query: ALL_BOOKS,
+              variables: { genre },
+            });
+
+            store.writeQuery({
+              query: ALL_BOOKS,
+              variables: { genre },
+              data: {
+                allBooks: [...dataInStore.allBooks].concat(
+                  response.data.addBook
+                ),
+              },
+            });
+          } catch (error) {
+            console.log(`${genre} not queried`);
+          }
+        });
+      },
     });
 
     setErrormsg(`SUCCESS: You have added a book ${title.value} by ${author.value}`);
