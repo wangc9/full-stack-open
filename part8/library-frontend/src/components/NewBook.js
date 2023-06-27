@@ -16,9 +16,7 @@ const NewBook = () => {
   const [addBook] = useMutation(ADD_BOOK, {
     refetchQueries: [{query: ALL_BOOKS}],
     onError: (error) => {
-      const errors = error.graphQLErrors[0].extensions.error.errors;
-      const message = Object.values(errors).map(e => e.message).join('/n');
-      setErrormsg(`Error: ${message}`);
+      error.graphQLErrors > 0 ? setErrormsg(`Error: ${error.graphQLErrors[0].message}`) : setErrormsg(`Error: ${error.message}`);
       setTimeout(() => {setErrormsg('')}, 3000);
     }
   })
@@ -27,7 +25,7 @@ const NewBook = () => {
     event.preventDefault()
 
     console.log('add book...')
-    addBook({
+    await addBook({
       variables: {
         title: title.value,
         author: author.value,

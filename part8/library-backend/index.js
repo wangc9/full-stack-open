@@ -26,6 +26,7 @@ const typeDefs = `
     allBooks(author: String = "", genre: String = ""): [Book!]
     allAuthors: [Author!]
     me: User
+    allGenres: [String!]
   }
 
   type Book {
@@ -111,6 +112,13 @@ const resolvers = {
     allAuthors: async () => Author.find({}),
     me: (root, args, context) => {
       return context.currentUser;
+    },
+    allGenres: async () => {
+      const books = await Book.find({});
+      let genres = books.map((book) => book.genres).reduce((a, b) => a.concat(b), []);
+      let result = [...new Set(genres)];
+
+      return result;
     }
   },
   Author: {
