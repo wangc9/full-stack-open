@@ -1,0 +1,25 @@
+{
+  "name": "bmi",
+  "version": "1.0.0",
+  "description": "A BMI calculator",
+  "main": "index.js",
+  "scripts": {
+    "ts-node": "ts-node",
+    "calculateBmi": "ts-node bmiCalculator.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangc9/full-stack-open.git"
+  },
+  "author": "Chen Wang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wangc9/full-stack-open/issues"
+  },
+  "homepage": "https://github.com/wangc9/full-stack-open#readme",
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.5"
+  }
+}
