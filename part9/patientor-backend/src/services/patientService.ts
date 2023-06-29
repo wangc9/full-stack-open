@@ -1,14 +1,15 @@
 import {Patient, secretPatient} from "../types";
 import patients from "../data/patients";
 
-const getPatients = (): secretPatient[] => {
-  return patients.map(({id, name, dateOfBirth, gender, occupation, ssn}) => ({
+const getPatients = (): Patient[] => {
+  return patients.map(({id, name, dateOfBirth, gender, occupation, ssn, entries}) => ({
     id,
     name,
     dateOfBirth,
     gender,
     occupation,
-    ssn
+    ssn,
+    entries
   }));
 };
 
