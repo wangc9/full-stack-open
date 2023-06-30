@@ -1,4 +1,4 @@
-import {Patient, secretPatient} from "../types";
+import {Entry, Patient, secretPatient} from "../types";
 import patients from "../data/patients";
 
 const getPatients = (): Patient[] => {
@@ -29,4 +29,10 @@ const addPatient = (patient: Patient): secretPatient => {
   };
 };
 
-export default { getPatients, getPatientById, addPatient };
+const addEntry = (entry: Entry, id: string): Patient => {
+  const patient = patients.findIndex((patient) => patient.id === id);
+  patients[patient].entries.push(entry);
+  return patients[patient];
+};
+
+export default { getPatients, getPatientById, addPatient, addEntry };
