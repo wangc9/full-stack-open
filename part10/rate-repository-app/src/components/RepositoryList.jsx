@@ -1,6 +1,8 @@
-import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet, View} from 'react-native';
 import RepositoryItem from './RepositoryItem';
 import Constants from 'expo-constants';
+import AppBar from './AppBar';
+import theme from '../theme';
 
 const styles = StyleSheet.create({
   separator: {
@@ -11,6 +13,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
   },
+  background: {
+    backgroundColor: theme.colors.mainBackground
+  }
 });
 
 const repositories = [
@@ -64,15 +69,17 @@ const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryList = () => {
   return (
-    <SafeAreaView style={styles.container}>
+    <View>
+      <AppBar />
       <FlatList
         data={repositories}
         ItemSeparatorComponent={ItemSeparator}
         renderItem={({item}) => <RepositoryItem item={item} /> }
         keyExtractor={item => item.id}
+        style={styles.background}
         // other props
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
