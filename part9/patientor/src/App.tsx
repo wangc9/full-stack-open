@@ -12,6 +12,7 @@ import {PatientDetail} from "./components/PatientListPage/Patient";
 
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
+  const [show, setShow] = useState<boolean>(false);
 
   useEffect(() => {
     void axios.get<void>(`${apiBaseUrl}/ping`);
@@ -21,7 +22,7 @@ const App = () => {
       setPatients(patients);
     };
     void fetchPatientList();
-  }, []);
+  }, [show]);
 
   const match = useMatch('/patients/:id');
   const patient = match ? patients.find((patient) => patient.id === match.params.id) : null;
@@ -38,7 +39,7 @@ const App = () => {
         <Divider hidden />
         <Routes>
           <Route path="/" element={<PatientListPage patients={patients} setPatients={setPatients} />} />
-          <Route path='/patients/:id' element={<PatientDetail patient={patient as Patient} />} />
+          <Route path='/patients/:id' element={<PatientDetail patient={patient as Patient} show={show} setShow={setShow} />} />
         </Routes>
       </Container>
     </div>

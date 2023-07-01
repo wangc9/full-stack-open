@@ -12,4 +12,8 @@ router.get('/:code', (req, res) => {
   res.send(diagnoseService.getDiagnoseByCode(code));
 });
 
+router.get('/codes/all', (_req, res) => {
+  res.send(diagnoseService.getCodes());
+});
+
 export default router;

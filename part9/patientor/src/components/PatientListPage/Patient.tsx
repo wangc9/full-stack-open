@@ -10,6 +10,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import React, {useEffect, useState} from "react";
+import {EntryForm} from "./EntryForm";
 
 const healthData = (health: HealthCheckRating) => {
   switch (health) {
@@ -48,7 +49,7 @@ const healthData = (health: HealthCheckRating) => {
 
 
 
-export const PatientDetail = ({patient}: {patient: Patient}) => {
+export const PatientDetail = ({patient, show, setShow}: {patient: Patient, show: boolean, setShow: React.Dispatch<React.SetStateAction<boolean>>}) => {
   const [name, setName] = useState<string[]>([]);
   const [codes, setCodes] = useState<Diagnosis[]>([]);
   const getDiagnose = async (code: string) => {
@@ -157,6 +158,8 @@ export const PatientDetail = ({patient}: {patient: Patient}) => {
           <EntryDetails entry={entry} />
         </div>
       ))}
+      <h3>Add New Entry</h3>
+      <EntryForm id={patient.id} show={show} setShow={setShow} />
     </div>
   )
 };

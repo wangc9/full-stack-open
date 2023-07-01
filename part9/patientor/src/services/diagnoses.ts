@@ -19,7 +19,15 @@ const getAll = async () => {
   return data;
 };
 
+const getAllCodes = async () => {
+  const { data } = await axios.get<string[]>(
+    `${apiBaseUrl}/diagnoses/codes/all`
+  );
+
+  return data;
+}
+
 export default {
-  getByCode, getAll
+  getByCode, getAll, getAllCodes
 };
 
