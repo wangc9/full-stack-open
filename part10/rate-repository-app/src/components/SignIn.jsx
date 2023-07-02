@@ -4,6 +4,7 @@ import {Pressable, StyleSheet, View} from 'react-native';
 import theme from '../theme';
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import useSignIn from '../hooks/useSignIn';
 
 const styles = StyleSheet.create({
   container: {
@@ -28,9 +29,18 @@ const validationSchema = yup.object().shape({
 });
 
 const SignIn = () => {
-  const submit = (values) => {
-    console.log(values);
-  }
+  const [signIn] = useSignIn();
+
+  const submit = async (values) => {
+    const {username, password} = values;
+    try {
+      const {data} = await signIn({username, password});
+      console.log(data.authenticate.accessToken);
+    } catch (error) {
+      console.log('error:', error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Formik initialValues={{username: '', password: '',}} onSubmit={submit} validationSchema={validationSchema}>
