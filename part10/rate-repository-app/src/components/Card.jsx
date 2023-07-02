@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
   infoContainer: {
     flexGrow: 1,
     alignItems: 'flex-start',
+    flexShrink: 1,
   },
   bodyContainer: {
     paddingVertical: 15,
