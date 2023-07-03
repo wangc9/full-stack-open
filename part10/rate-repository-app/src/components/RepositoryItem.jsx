@@ -2,7 +2,7 @@ import Card from './Card';
 
 const RepositoryItem = ({item}) => {
   return (
-    <Card item={item} />
+    <Card item={item} inList={true} />
   );
 };
 
