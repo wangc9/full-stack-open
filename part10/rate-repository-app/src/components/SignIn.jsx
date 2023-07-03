@@ -29,6 +29,22 @@ const validationSchema = yup.object().shape({
   password: yup.string().min(5, 'Password is too weak, must be at least 5 chars long').required('Password is required'),
 });
 
+export const SignInContainer = ({submit}) => {
+  return (
+    <View style={styles.container}>
+      <Formik initialValues={{username: '', password: '',}} onSubmit={submit} validationSchema={validationSchema}>
+        {({handleSubmit}) => <>
+          <FormikTextInput name="username" placeholder="username" secureTextEntry={false} borderRadius={5} />
+          <FormikTextInput name="password" placeholder="password" secureTextEntry={true} borderRadius={5} />
+          <Pressable style={styles.button} onPress={handleSubmit}>
+            <Text style={styles.text}>Sign in</Text>
+          </Pressable>
+        </>}
+      </Formik>
+    </View>
+  );
+}
+
 const SignIn = () => {
   const navigate = useNavigate();
   const [signIn] = useSignIn();
@@ -43,19 +59,7 @@ const SignIn = () => {
     }
   };
 
-  return (
-    <View style={styles.container}>
-      <Formik initialValues={{username: '', password: '',}} onSubmit={submit} validationSchema={validationSchema}>
-        {({handleSubmit}) => <>
-          <FormikTextInput name="username" placeholder="username" secureTextEntry={false} borderRadius={5} />
-          <FormikTextInput name="password" placeholder="password" secureTextEntry={true} borderRadius={5} />
-          <Pressable style={styles.button} onPress={handleSubmit}>
-            <Text style={styles.text}>Sign in</Text>
-          </Pressable>
-        </>}
-      </Formik>
-    </View>
-  );
+  return (<SignInContainer submit={submit} />);
 };
 
 export default SignIn;

@@ -41,12 +41,12 @@ const styles = StyleSheet.create({
 
 const Card = ({item}) => {
   return (
-    <View style={styles.cardContainer}>
+    <View testID="cardItem" style={styles.cardContainer}>
       <View style={styles.headerContainer}>
         <View style={styles.avatarContainer}>
           <Image source={{uri: item.ownerAvatarUrl}} style={styles.avatar} />
         </View>
-        <View style={styles.infoContainer}>
+        <View testID="info" style={styles.infoContainer}>
           <Text fontWeight='bold'>{item.fullName}</Text>
           <Text color='textSecondary'>{item.description}</Text>
           <Text style={{color: '#eeeeee', backgroundColor: theme.colors.primary, padding: 5, justifyContent: 'flex-start'}}>{item.language}</Text>
@@ -54,19 +54,19 @@ const Card = ({item}) => {
       </View>
       <View style={styles.bodyContainer}>
         <View style={styles.dataContainer}>
-          <View style={styles.itemContainer}>
+          <View testID="stars" style={styles.itemContainer}>
             <Text fontWeight='bold'>{(Number(item.stargazersCount)/1000).toFixed(1)}k</Text>
             <Text color='textSecondary'>Stars</Text>
           </View>
-          <View style={styles.itemContainer}>
+          <View testID="forks" style={styles.itemContainer}>
             <Text fontWeight='bold'>{(Number(item.forksCount)/1000).toFixed(1)}k</Text>
             <Text color='textSecondary'>Forks</Text>
           </View>
-          <View style={styles.itemContainer}>
+          <View testID="reviews" style={styles.itemContainer}>
             <Text fontWeight='bold'>{item.reviewCount}</Text>
             <Text color='textSecondary'>Reviews</Text>
           </View>
-          <View style={styles.itemContainer}>
+          <View testID="rating" style={styles.itemContainer}>
             <Text fontWeight='bold'>{item.ratingAverage}</Text>
             <Text color='textSecondary'>Rating</Text>
           </View>

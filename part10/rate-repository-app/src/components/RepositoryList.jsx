@@ -2,8 +2,7 @@ import {FlatList, StyleSheet, View} from 'react-native';
 import RepositoryItem from './RepositoryItem';
 import Constants from 'expo-constants';
 import theme from '../theme';
-import {useQuery} from '@apollo/client';
-import {GET_REPOSITORIES} from '../graphql/Query';
+import useRepositories from '../hooks/useRepositories';
 
 const styles = StyleSheet.create({
   separator: {
@@ -21,9 +20,7 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-const RepositoryList = () => {
-  const {data, error, loading} = useQuery(GET_REPOSITORIES);
-
+export const RepositoryListContainer = ({data}) => {
   const repositoryNodes = data ? data.repositories.edges.map(edge => edge.node) : [];
 
   return (
@@ -38,6 +35,11 @@ const RepositoryList = () => {
       />
     </View>
   );
+};
+const RepositoryList = () => {
+  const data = useRepositories();
+
+  return <RepositoryListContainer data={data} />
 };
 
 export default RepositoryList;
