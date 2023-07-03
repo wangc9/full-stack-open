@@ -1,5 +1,6 @@
 import {
   Button,
+  FlatList,
   Image,
   Linking,
   Pressable,
@@ -11,6 +12,7 @@ import theme from '../theme';
 import {useNavigate, useParams} from 'react-router-native';
 import {useQuery} from '@apollo/client';
 import {GET_REPO} from '../graphql/Query';
+import ReviewCard from './ReviewCard';
 
 const styles = StyleSheet.create({
   cardContainer: {
@@ -61,6 +63,8 @@ const Card = ({item, inList}) => {
   if (loading) {
     return (<><Text>Loading</Text></>)
   }
+  const reviews = data ? data.repository.reviews.edges.map(edge => edge.node) : [];
+  const ItemSeparator = () => <View style={styles.separator} />;
 
   return (
     <>
@@ -100,39 +104,48 @@ const Card = ({item, inList}) => {
           </View>
         </Pressable>
         ) : (
-          <View testID="cardItem" style={styles.cardContainer}>
-            <View style={styles.headerContainer}>
-              <View style={styles.avatarContainer}>
-                <Image source={{uri: data.repository.ownerAvatarUrl}} style={styles.avatar} />
+          <>
+            <View testID="cardItem" style={styles.cardContainer}>
+              <View style={styles.headerContainer}>
+                <View style={styles.avatarContainer}>
+                  <Image source={{uri: data.repository.ownerAvatarUrl}} style={styles.avatar} />
+                </View>
+                <View testID="info" style={styles.infoContainer}>
+                  <Text fontWeight='bold'>{data.repository.fullName}</Text>
+                  <Text color='textSecondary'>{data.repository.description}</Text>
+                  <Text style={{color: '#eeeeee', backgroundColor: theme.colors.primary, padding: 5, justifyContent: 'flex-start'}}>{data.repository.language}</Text>
+                </View>
               </View>
-              <View testID="info" style={styles.infoContainer}>
-                <Text fontWeight='bold'>{data.repository.fullName}</Text>
-                <Text color='textSecondary'>{data.repository.description}</Text>
-                <Text style={{color: '#eeeeee', backgroundColor: theme.colors.primary, padding: 5, justifyContent: 'flex-start'}}>{data.repository.language}</Text>
+              <View style={styles.bodyContainer}>
+                <View style={styles.dataContainer}>
+                  <View testID="stars" style={styles.itemContainer}>
+                    <Text fontWeight='bold'>{(Number(data.repository.stargazersCount)/1000).toFixed(1)}k</Text>
+                    <Text color='textSecondary'>Stars</Text>
+                  </View>
+                  <View testID="forks" style={styles.itemContainer}>
+                    <Text fontWeight='bold'>{(Number(data.repository.forksCount)/1000).toFixed(1)}k</Text>
+                    <Text color='textSecondary'>Forks</Text>
+                  </View>
+                  <View testID="reviews" style={styles.itemContainer}>
+                    <Text fontWeight='bold'>{data.repository.reviewCount}</Text>
+                    <Text color='textSecondary'>Reviews</Text>
+                  </View>
+                  <View testID="rating" style={styles.itemContainer}>
+                    <Text fontWeight='bold'>{data.repository.ratingAverage}</Text>
+                    <Text color='textSecondary'>Rating</Text>
+                  </View>
+                </View>
               </View>
+              <Button title='Open in Github' onPress={() => {Linking.openURL(data.repository.url)}} />
             </View>
-            <View style={styles.bodyContainer}>
-              <View style={styles.dataContainer}>
-                <View testID="stars" style={styles.itemContainer}>
-                  <Text fontWeight='bold'>{(Number(data.repository.stargazersCount)/1000).toFixed(1)}k</Text>
-                  <Text color='textSecondary'>Stars</Text>
-                </View>
-                <View testID="forks" style={styles.itemContainer}>
-                  <Text fontWeight='bold'>{(Number(data.repository.forksCount)/1000).toFixed(1)}k</Text>
-                  <Text color='textSecondary'>Forks</Text>
-                </View>
-                <View testID="reviews" style={styles.itemContainer}>
-                  <Text fontWeight='bold'>{data.repository.reviewCount}</Text>
-                  <Text color='textSecondary'>Reviews</Text>
-                </View>
-                <View testID="rating" style={styles.itemContainer}>
-                  <Text fontWeight='bold'>{data.repository.ratingAverage}</Text>
-                  <Text color='textSecondary'>Rating</Text>
-                </View>
-              </View>
-            </View>
-            <Button title='Open in Github' onPress={() => {Linking.openURL(data.repository.url)}} />
-          </View>
+            <FlatList
+              data={reviews}
+              ItemSeparatorComponent={ItemSeparator}
+              keyExtractor={item => item.id}
+              style={{backgroundColor: theme.colors.mainBackground}}
+              renderItem={({item}) => <ReviewCard item={item}/>}
+            />
+          </>
       )}
     </>
 
