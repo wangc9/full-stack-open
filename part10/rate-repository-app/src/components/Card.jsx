@@ -59,6 +59,7 @@ const Card = ({item, inList}) => {
       repositoryId: id
     },
     skip: id === null,
+    fetchPolicy: 'cache-and-network',
   });
   if (loading) {
     return (<><Text>Loading</Text></>)
