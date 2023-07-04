@@ -53,6 +53,7 @@ const AppBar = () => {
         <Link to='/repositories'><Text style={{padding: 10, color: '#eeeeee', fontWeight: '700'}}>Repositories</Text></Link>
         <Link to='/create_review'><Text style={{padding: 10, color: '#eeeeee', fontWeight: '700'}}>Create Review</Text></Link>
         {!signed && <Link to='/sign_in'><Text style={{padding: 10, color: '#eeeeee', fontWeight: '700'}}>Sign In</Text></Link>}
+        {!signed && <Link to='/sign_up'><Text style={{padding: 10, color: '#eeeeee', fontWeight: '700'}}>Sign Up</Text></Link>}
         {signed && <Pressable onPress={press}><Text style={{padding: 10, color: '#eeeeee', fontWeight: '700'}}>{user} Sign Out</Text></Pressable>}
       </ScrollView>
     </View>

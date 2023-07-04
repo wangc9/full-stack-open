@@ -8,6 +8,14 @@ export const SIGN_IN = gql`
   }
 `;
 
+export const SIGN_UP = gql`
+  mutation CreateUser($user: CreateUserInput) {
+    createUser(user: $user) {
+      username
+    }
+  }
+`;
+
 export const CREATE_REVIEW = gql`
   mutation CreateReview($review: CreateReviewInput) {
     createReview(review: $review) {

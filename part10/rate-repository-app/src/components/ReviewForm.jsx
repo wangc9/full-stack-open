@@ -1,6 +1,5 @@
 import FormikTextInput from './FormikTextInput';
 import {Button, StyleSheet, View} from 'react-native';
-import theme from '../theme';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {useNavigate} from 'react-router-native';
@@ -10,16 +9,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'stretch',
     padding: 20,
-  },
-  button: {
-    backgroundColor: theme.colors.primary,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  text: {
-    color: theme.colors.textWhite,
-    fontWeight: 'bold',
-    paddingVertical: 15,
   },
 });
 
