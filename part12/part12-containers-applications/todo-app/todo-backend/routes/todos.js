@@ -3,7 +3,6 @@ const { Todo } = require('../mongo')
 const router = express.Router();
 const redis = require('../redis');
 
-redis.setAsync('count', '0');
 
 /* GET todos listing. */
 router.get('/', async (_, res) => {
