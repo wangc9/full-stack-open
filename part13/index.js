@@ -3,6 +3,8 @@ const { Sequelize, Model, DataTypes } = require('sequelize');
 const express = require('express');
 const app = express();
 
+app.use(express.json());
+
 const sequelize = new Sequelize(process.env.DATABASE_URL);
 
 class Blog extends Model {}
@@ -37,19 +39,35 @@ Blog.init(
   }
 );
 
-const main = async () => {
-  try {
-    await sequelize.authenticate();
-    const blogs = await Blog.findAll();
-    blogs.map((blog) => {
-      console.log(
-        `${blog.dataValues.author}: ${blog.dataValues.title}, ${blog.dataValues.likes} likes`
-      );
-    });
-    sequelize.close();
-  } catch (error) {
-    console.error('An error occured', error);
-  }
-};
+app.get('/api/blogs', async (request, response) => {
+  const blogs = await Blog.findAll();
+  response.json(blogs);
+});
 
-main();
+app.post('/api/blogs', async (request, response) => {
+  const body = request.body;
+  try {
+    const newBlog = Blog.build(body);
+    await newBlog.save();
+
+    return response.status(201).json(newBlog);
+  } catch (error) {
+    return response.status(400).json(error);
+  }
+});
+
+app.delete('/api/blogs/:id', async (request, response) => {
+  const id = request.params.id;
+  try {
+    const blog = await Blog.findByPk(id);
+    await blog.destroy();
+    return response.status(204).end();
+  } catch (error) {
+    return response.status(400).json(error);
+  }
+});
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
