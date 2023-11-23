@@ -3,6 +3,7 @@ const blogRouter = require('express').Router();
 const { Blog, User } = require('../models/index');
 const jwt = require('jsonwebtoken');
 const { SECRET } = require('../util/config');
+const { Op } = require('sequelize');
 
 const blogFinder = async (request, _response, next) => {
   request.blog = await Blog.findByPk(request.params.id);
@@ -23,13 +24,32 @@ const getToken = (request, _response, next) => {
   next();
 };
 
-blogRouter.get('/', async (_request, response) => {
+blogRouter.get('/', async (request, response) => {
+  let where = {};
+  if (request.query.search) {
+    where = {
+      [Op.or]: [
+        {
+          title: {
+            [Op.substring]: request.query.search,
+          },
+        },
+        {
+          author: {
+            [Op.substring]: request.query.search,
+          },
+        },
+      ],
+    };
+  }
   const blogs = await Blog.findAll({
     attributes: { exclude: ['userId'] },
     include: {
       model: User,
       attributes: ['name'],
     },
+    where,
+    order: [['likes', 'DESC']],
   });
   response.json(blogs);
 });
