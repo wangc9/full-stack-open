@@ -1,0 +1,25 @@
+{
+  "name": "part13",
+  "version": "1.0.0",
+  "description": "Exercise for part 13 of Full Stack Open",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --verbose --runInBand"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wangc9/full-stack-open.git"
+  },
+  "author": "Chen Wang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wangc9/full-stack-open/issues"
+  },
+  "homepage": "https://github.com/wangc9/full-stack-open#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "pg": "^8.11.3",
+    "sequelize": "^6.35.1"
+  }
+}
