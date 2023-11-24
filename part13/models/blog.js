@@ -24,11 +24,18 @@ Blog.init(
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
+    year: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        min: 1991,
+        max: 2023,
+      },
+    },
   },
   {
     sequelize,
     underscored: true,
-    timestamps: false,
     modelName: 'blog',
   }
 );
