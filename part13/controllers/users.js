@@ -10,13 +10,43 @@ const userFinder = async (request, _response, next) => {
   next();
 };
 
+userRouter.get('/:id', async (request, response, next) => {
+  let stateWhere = {};
+  if (request.query.read) {
+    stateWhere.state = request.query.read === 'true' ? 'read' : 'unread';
+    console.log(stateWhere);
+  }
+  const user = await User.findOne({
+    where: { id: request.params.id },
+    attributes: { exclude: 'passwordHash' },
+    include: [
+      {
+        model: Blog,
+        attributes: { exclude: ['userId'] },
+        through: {
+          attributes: ['state', 'id'],
+          where: stateWhere,
+        },
+        as: 'readings',
+      },
+    ],
+  });
+  if (user) {
+    return response.json(user);
+  } else {
+    next(new ReferenceError('No user found'));
+  }
+});
+
 userRouter.get('/', async (_request, response) => {
   const users = await User.findAll({
     attributes: { exclude: ['passwordHash'] },
-    include: {
-      model: Blog,
-      attributes: { exclude: ['userId'] },
-    },
+    include: [
+      {
+        model: Blog,
+        attributes: { exclude: ['userId'] },
+      },
+    ],
   });
   response.json(users);
 });

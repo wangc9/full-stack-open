@@ -1,5 +1,4 @@
 const errorHandler = (error, request, response, next) => {
-  console.log(error);
   if (error.name === 'SequelizeValidationError') {
     return response.status(400).json(error);
   }
@@ -10,7 +9,7 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).json(error);
   }
   if (error.name === 'EvalError') {
-    return response.status(401).json(error);
+    return response.status(401).json({ error: error.message });
   }
 
   next(error);

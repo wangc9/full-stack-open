@@ -67,33 +67,51 @@ blogRouter.post('/', getToken, async (request, response, next) => {
   }
 });
 
-blogRouter.delete('/:id', blogFinder, async (request, response, next) => {
-  if (request.blog) {
-    try {
-      const blog = request.blog;
-      await blog.destroy();
-      return response.status(204).end();
-    } catch (error) {
-      next(error);
+blogRouter.delete(
+  '/:id',
+  getToken,
+  blogFinder,
+  async (request, response, next) => {
+    if (request.blog) {
+      if (request.blog.userId === request.decodedToken.id) {
+        try {
+          const blog = request.blog;
+          await blog.destroy();
+          return response.status(204).end();
+        } catch (error) {
+          next(error);
+        }
+      } else {
+        next(new EvalError('The blog does not belong to the user'));
+      }
+    } else {
+      next(new ReferenceError('No blog found'));
     }
-  } else {
-    next(new ReferenceError('No blog found'));
   }
-});
+);
 
-blogRouter.put('/:id', blogFinder, async (request, response, next) => {
-  if (request.blog) {
-    try {
-      const blog = request.blog;
-      blog.likes = request.body.likes;
-      await blog.save();
-      return response.status(201).json(blog);
-    } catch (error) {
-      next(error);
+blogRouter.put(
+  '/:id',
+  getToken,
+  blogFinder,
+  async (request, response, next) => {
+    if (request.blog) {
+      if (request.blog.userId === request.decodedToken.id) {
+        try {
+          const blog = request.blog;
+          blog.likes = request.body.likes;
+          await blog.save();
+          return response.status(201).json(blog);
+        } catch (error) {
+          next(error);
+        }
+      } else {
+        next(new EvalError('The blog does not belong to the user'));
+      }
+    } else {
+      next(new ReferenceError('No blog found'));
     }
-  } else {
-    next(new ReferenceError('No blog found'));
   }
-});
+);
 
 module.exports = blogRouter;
