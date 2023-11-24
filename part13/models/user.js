@@ -25,11 +25,18 @@ User.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
+    enabled: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
   },
   {
     sequelize,
     underscored: true,
     modelName: 'user',
+    defaultScope: {
+      where: { enabled: true },
+    },
   }
 );
 

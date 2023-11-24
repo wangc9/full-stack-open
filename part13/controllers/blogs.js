@@ -1,6 +1,6 @@
 const blogRouter = require('express').Router();
 
-const { Blog, User } = require('../models/index');
+const { Blog, User, Session } = require('../models/index');
 const jwt = require('jsonwebtoken');
 const { SECRET } = require('../util/config');
 const { Op } = require('sequelize');
@@ -10,11 +10,17 @@ const blogFinder = async (request, _response, next) => {
   next();
 };
 
-const getToken = (request, _response, next) => {
+const getToken = async (request, _response, next) => {
   const authorization = request.get('authorization');
   if (authorization && authorization.startsWith('Bearer ')) {
     try {
       request.decodedToken = jwt.verify(authorization.substring(7), SECRET);
+      const session = await Session.findOne({
+        where: { user: request.decodedToken.id },
+      });
+      if (!session) {
+        next(new EvalError('Login has expired'));
+      }
     } catch (error) {
       next(new EvalError('Token invalid'));
     }
