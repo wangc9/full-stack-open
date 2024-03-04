@@ -7,6 +7,10 @@
   },
   "extends": ["eslint:recommended", "plugin:react/recommended"],
   "parser": "@babel/eslint-parser",
+  // "parserOptions": {
+  //   "requireConfigFile": false
+  // },
+  "workingDirectories": [{ "mode": "auto" }],
   "env": {
     "react-native/react-native": true
   },
