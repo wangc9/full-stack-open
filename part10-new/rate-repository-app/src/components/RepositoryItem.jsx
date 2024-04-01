@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
   secondary: {
     display: 'flex',
     paddingLeft: 10,
+    width: '80%',
   },
   tag: {
     backgroundColor: theme.colors.primary,
@@ -83,7 +84,12 @@ export default function RepositoryItem(props) {
           <Text
             color="textSecondary"
             fontSize="body"
-            style={{ paddingTop: 2, paddingBottom: 6 }}
+            style={{
+              paddingTop: 2,
+              paddingBottom: 12,
+              paddingRight: 4,
+              width: '100%',
+            }}
           >
             {description}
           </Text>
