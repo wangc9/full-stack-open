@@ -4,6 +4,7 @@ import Text from './Text';
 import { Formik } from 'formik';
 import theme from '../theme';
 import useSignIn from '../hooks/useSignIn';
+import { useNavigate } from 'react-router-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -39,6 +40,7 @@ const validationSchema = yup.object().shape({
 
 const SignIn = () => {
   const [signIn] = useSignIn();
+  const navigate = useNavigate();
 
   const onSubmit = async (values) => {
     const { Username, Password } = values;
@@ -47,7 +49,9 @@ const SignIn = () => {
         username: Username,
         password: Password,
       });
-      console.log(authenticate);
+      if (authenticate.accessToken) {
+        navigate('/');
+      }
     } catch (error) {
       console.log(error);
     }
