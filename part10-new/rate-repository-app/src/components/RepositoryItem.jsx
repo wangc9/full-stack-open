@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
     padding: theme.fontSizes.body,
     marginTop: 0.25 * theme.fontSizes.body,
     display: 'flex',
+    backgroundColor: theme.colors.navButton,
   },
   main: {
     paddingBottom: 0.5 * theme.fontSizes.body,
