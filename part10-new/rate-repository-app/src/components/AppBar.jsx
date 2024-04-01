@@ -2,6 +2,10 @@ import { View, StyleSheet, Pressable, Text, ScrollView } from 'react-native';
 import Constants from 'expo-constants';
 import theme from '../theme';
 import AppBarTab from './AppBarTab';
+import { useQuery } from '@apollo/client';
+import { GET_SELF } from '../graphql/queries';
+import useSelf from '../hooks/useSelf';
+import SignOutButton from './SignOutButton';
 
 const styles = StyleSheet.create({
   container: {
@@ -13,11 +17,16 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
+  const { username } = useSelf();
   return (
     <View style={styles.container}>
       <ScrollView horizontal>
         <AppBarTab name="Repositories" link="/" />
-        <AppBarTab name="Sign In" link="/sign-in" />
+        {username === undefined ? (
+          <AppBarTab name="Sign In" link="/sign-in" />
+        ) : (
+          <SignOutButton />
+        )}
       </ScrollView>
     </View>
   );
