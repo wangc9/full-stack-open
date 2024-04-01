@@ -1,6 +1,7 @@
-import { Button, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import * as yup from 'yup';
 import Text from './Text';
-import { Field, Form, Formik } from 'formik';
+import { Formik } from 'formik';
 import theme from '../theme';
 
 const styles = StyleSheet.create({
@@ -30,6 +31,11 @@ const styles = StyleSheet.create({
   },
 });
 
+const validationSchema = yup.object().shape({
+  Username: yup.string().required('Username is required'),
+  Password: yup.string().required('Password is required'),
+});
+
 const SignIn = () => {
   const onSubmit = (values) => {
     console.log(values);
@@ -44,22 +50,39 @@ const SignIn = () => {
         }}
         onSubmit={onSubmit}
         style={styles.container}
+        validationSchema={validationSchema}
       >
-        {({ handleChange, handleBlur, handleSubmit, values }) => (
+        {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
           <View>
+            {errors.Username && (
+              <Text style={{ color: 'red' }}>{errors.Username}</Text>
+            )}
             <TextInput
               onChangeText={handleChange('Username')}
               onBlur={handleBlur('Username')}
               value={values.Username}
               placeholder="Username"
-              style={styles.text}
+              style={{
+                ...styles.text,
+                borderColor: errors.Username
+                  ? 'red'
+                  : theme.colors.textSecondary,
+              }}
             />
+            {errors.Password && (
+              <Text style={{ color: 'red' }}>{errors.Password}</Text>
+            )}
             <TextInput
               onChangeText={handleChange('Password')}
               onBlur={handleBlur('Password')}
               value={values.Password}
               placeholder="Password"
-              style={styles.text}
+              style={{
+                ...styles.text,
+                borderColor: errors.Password
+                  ? 'red'
+                  : theme.colors.textSecondary,
+              }}
               secureTextEntry
             />
             <Pressable
