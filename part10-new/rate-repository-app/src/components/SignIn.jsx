@@ -38,25 +38,7 @@ const validationSchema = yup.object().shape({
   Password: yup.string().required('Password is required'),
 });
 
-const SignIn = () => {
-  const [signIn] = useSignIn();
-  const navigate = useNavigate();
-
-  const onSubmit = async (values) => {
-    const { Username, Password } = values;
-    try {
-      const { authenticate } = await signIn({
-        username: Username,
-        password: Password,
-      });
-      if (authenticate.accessToken) {
-        navigate('/');
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+export function SignInContainer({ onSubmit }) {
   return (
     <View style={styles.container}>
       <Formik
@@ -84,6 +66,7 @@ const SignIn = () => {
                   ? 'red'
                   : theme.colors.textSecondary,
               }}
+              testID="username"
             />
             {errors.Password && (
               <Text style={{ color: 'red' }}>{errors.Password}</Text>
@@ -100,6 +83,7 @@ const SignIn = () => {
                   : theme.colors.textSecondary,
               }}
               secureTextEntry
+              testID="password"
             />
             <Pressable
               style={({ pressed }) =>
@@ -111,6 +95,7 @@ const SignIn = () => {
                   : styles.button
               }
               onPress={handleSubmit}
+              testID="submit"
             >
               <Text style={styles.buttonText}>Sign in</Text>
             </Pressable>
@@ -119,6 +104,28 @@ const SignIn = () => {
       </Formik>
     </View>
   );
+}
+
+const SignIn = () => {
+  const [signIn] = useSignIn();
+  const navigate = useNavigate();
+
+  const onSubmit = async (values) => {
+    const { Username, Password } = values;
+    try {
+      const { authenticate } = await signIn({
+        username: Username,
+        password: Password,
+      });
+      if (authenticate.accessToken) {
+        navigate('/');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return <SignInContainer onSubmit={onSubmit} />;
 };
 
 export default SignIn;
