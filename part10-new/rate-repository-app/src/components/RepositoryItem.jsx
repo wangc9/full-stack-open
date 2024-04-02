@@ -69,7 +69,7 @@ export default function RepositoryItem(props) {
   } = props.props;
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="repositoryItem">
       <View style={styles.main}>
         <Image style={styles.img} source={{ uri: ownerAvatarUrl }} />
         <View style={styles.secondary}>
@@ -78,6 +78,7 @@ export default function RepositoryItem(props) {
             fontSize="subheading"
             fontWeight="bold"
             style={{ paddingVertical: 2 }}
+            testID="fullname"
           >
             {fullName}
           </Text>
@@ -90,10 +91,13 @@ export default function RepositoryItem(props) {
               paddingRight: 4,
               width: '100%',
             }}
+            testID="description"
           >
             {description}
           </Text>
-          <NativeText style={styles.tag}>{language}</NativeText>
+          <NativeText style={styles.tag} testID="language">
+            {language}
+          </NativeText>
         </View>
       </View>
       <View style={styles.dataContainer}>
@@ -102,6 +106,7 @@ export default function RepositoryItem(props) {
             fontSize="subheading"
             fontWeight="bold"
             style={{ paddingBottom: 4 }}
+            testID="star-count"
           >
             {calculator(stargazersCount)}
           </Text>
@@ -114,6 +119,7 @@ export default function RepositoryItem(props) {
             fontSize="subheading"
             fontWeight="bold"
             style={{ paddingBottom: 4 }}
+            testID="fork-count"
           >
             {calculator(forksCount)}
           </Text>
@@ -126,6 +132,7 @@ export default function RepositoryItem(props) {
             fontSize="subheading"
             fontWeight="bold"
             style={{ paddingBottom: 4 }}
+            testID="review-count"
           >
             {calculator(reviewCount)}
           </Text>
@@ -138,6 +145,7 @@ export default function RepositoryItem(props) {
             fontSize="subheading"
             fontWeight="bold"
             style={{ paddingBottom: 4 }}
+            testID="rating"
           >
             {calculator(ratingAverage)}
           </Text>
