@@ -5,12 +5,14 @@ import {
   View,
   Pressable,
   Linking,
+  FlatList,
 } from 'react-native';
 import theme from '../theme';
 import Text from './Text';
 import { useParams } from 'react-router-native';
 import { useQuery } from '@apollo/client';
 import { GET_REPOSITORY } from '../graphql/queries';
+import ReviewCard from './ReviewCard';
 
 const styles = StyleSheet.create({
   container: {
@@ -67,70 +69,24 @@ const styles = StyleSheet.create({
     color: theme.colors.navButton,
     fontWeight: theme.fontWeights.bold,
   },
+  separator: {
+    height: 10,
+    backgroundColor: theme.colors.textSecondary,
+  },
 });
 
-export default function RepositoryItem(props) {
-  let { id } = useParams();
-  const {
-    data: repo,
-    error,
-    loading,
-  } = useQuery(GET_REPOSITORY, {
-    variables: { repositoryId: id },
-    skip: id === undefined,
-    fetchPolicy: 'cache-and-network',
-  });
-  if (loading) {
-    return <Text>loading</Text>;
-  }
-  let fullName,
-    description,
-    language,
-    forksCount,
-    stargazersCount,
-    ratingAverage,
-    reviewCount,
-    ownerAvatarUrl;
-  const calculator = (number) => {
-    if (number < 1000) {
-      return number;
-    }
-    const result = number / 1000;
-
-    return `${result.toFixed(1)}k`;
-  };
-
-  if (id) {
-    fullName = repo.repository.fullName;
-    description = repo.repository.description;
-    language = repo.repository.language;
-    forksCount = repo.repository.forksCount;
-    stargazersCount = repo.repository.stargazersCount;
-    ratingAverage = repo.repository.ratingAverage;
-    reviewCount = repo.repository.reviewCount;
-    ownerAvatarUrl = repo.repository.ownerAvatarUrl;
-  } else {
-    fullName = props.props.fullName;
-    description = props.props.description;
-    language = props.props.language;
-    forksCount = props.props.forksCount;
-    stargazersCount = props.props.stargazersCount;
-    ratingAverage = props.props.ratingAverage;
-    reviewCount = props.props.reviewCount;
-    ownerAvatarUrl = props.props.ownerAvatarUrl;
-  }
-
-  // {
-  //   fullName,
-  //   description,
-  //   language,
-  //   forksCount,
-  //   stargazersCount,
-  //   ratingAverage,
-  //   reviewCount,
-  //   ownerAvatarUrl,
-  // } = props.props;
-
+export function Repository({
+  calculator,
+  id,
+  fullName,
+  description,
+  language,
+  forksCount,
+  stargazersCount,
+  ratingAverage,
+  reviewCount,
+  ownerAvatarUrl,
+}) {
   return (
     <View style={styles.container} testID="repositoryItem">
       <View style={styles.main}>
@@ -228,5 +184,99 @@ export default function RepositoryItem(props) {
         </Pressable>
       )}
     </View>
+  );
+}
+
+const ItemSeparator = () => <View style={styles.separator} />;
+
+export default function RepositoryItem(props) {
+  let { id } = useParams();
+  const {
+    data: repo,
+    error,
+    loading,
+  } = useQuery(GET_REPOSITORY, {
+    variables: { repositoryId: id },
+    skip: id === undefined,
+    fetchPolicy: 'cache-and-network',
+  });
+  if (loading) {
+    return <Text>loading</Text>;
+  }
+  let fullName,
+    description,
+    language,
+    forksCount,
+    stargazersCount,
+    ratingAverage,
+    reviewCount,
+    ownerAvatarUrl;
+  const calculator = (number) => {
+    if (number < 1000) {
+      return number;
+    }
+    const result = number / 1000;
+
+    return `${result.toFixed(1)}k`;
+  };
+
+  if (id) {
+    fullName = repo.repository.fullName;
+    description = repo.repository.description;
+    language = repo.repository.language;
+    forksCount = repo.repository.forksCount;
+    stargazersCount = repo.repository.stargazersCount;
+    ratingAverage = repo.repository.ratingAverage;
+    reviewCount = repo.repository.reviewCount;
+    ownerAvatarUrl = repo.repository.ownerAvatarUrl;
+  } else {
+    fullName = props.props.fullName;
+    description = props.props.description;
+    language = props.props.language;
+    forksCount = props.props.forksCount;
+    stargazersCount = props.props.stargazersCount;
+    ratingAverage = props.props.ratingAverage;
+    reviewCount = props.props.reviewCount;
+    ownerAvatarUrl = props.props.ownerAvatarUrl;
+  }
+
+  if (id) {
+    return (
+      <FlatList
+        data={repo.repository.reviews.edges}
+        renderItem={({ item }) => <ReviewCard review={item.node} />}
+        ItemSeparatorComponent={<ItemSeparator />}
+        stickyHeaderIndices={[0]}
+        ListHeaderComponent={() => (
+          <Repository
+            calculator={calculator}
+            id={id}
+            fullName={fullName}
+            description={description}
+            language={language}
+            forksCount={forksCount}
+            stargazersCount={stargazersCount}
+            ratingAverage={ratingAverage}
+            reviewCount={reviewCount}
+            ownerAvatarUrl={ownerAvatarUrl}
+          />
+        )}
+      />
+    );
+  }
+
+  return (
+    <Repository
+      calculator={calculator}
+      id={id}
+      fullName={fullName}
+      description={description}
+      language={language}
+      forksCount={forksCount}
+      stargazersCount={stargazersCount}
+      ratingAverage={ratingAverage}
+      reviewCount={reviewCount}
+      ownerAvatarUrl={ownerAvatarUrl}
+    />
   );
 }
