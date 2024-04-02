@@ -1,6 +1,16 @@
-import { Image, StyleSheet, Text as NativeText, View } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text as NativeText,
+  View,
+  Pressable,
+  Linking,
+} from 'react-native';
 import theme from '../theme';
 import Text from './Text';
+import { useParams } from 'react-router-native';
+import { useQuery } from '@apollo/client';
+import { GET_REPOSITORY } from '../graphql/queries';
 
 const styles = StyleSheet.create({
   container: {
@@ -45,9 +55,42 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  button: {
+    paddingVertical: theme.fontSizes.body,
+    backgroundColor: theme.colors.primary,
+    borderRadius: 4,
+    marginTop: 8,
+  },
+  buttonText: {
+    alignSelf: 'center',
+    fontSize: theme.fontSizes.subheading,
+    color: theme.colors.navButton,
+    fontWeight: theme.fontWeights.bold,
+  },
 });
 
 export default function RepositoryItem(props) {
+  let { id } = useParams();
+  const {
+    data: repo,
+    error,
+    loading,
+  } = useQuery(GET_REPOSITORY, {
+    variables: { repositoryId: id },
+    skip: id === undefined,
+    fetchPolicy: 'cache-and-network',
+  });
+  if (loading) {
+    return <Text>loading</Text>;
+  }
+  let fullName,
+    description,
+    language,
+    forksCount,
+    stargazersCount,
+    ratingAverage,
+    reviewCount,
+    ownerAvatarUrl;
   const calculator = (number) => {
     if (number < 1000) {
       return number;
@@ -57,16 +100,36 @@ export default function RepositoryItem(props) {
     return `${result.toFixed(1)}k`;
   };
 
-  const {
-    fullName,
-    description,
-    language,
-    forksCount,
-    stargazersCount,
-    ratingAverage,
-    reviewCount,
-    ownerAvatarUrl,
-  } = props.props;
+  if (id) {
+    fullName = repo.repository.fullName;
+    description = repo.repository.description;
+    language = repo.repository.language;
+    forksCount = repo.repository.forksCount;
+    stargazersCount = repo.repository.stargazersCount;
+    ratingAverage = repo.repository.ratingAverage;
+    reviewCount = repo.repository.reviewCount;
+    ownerAvatarUrl = repo.repository.ownerAvatarUrl;
+  } else {
+    fullName = props.props.fullName;
+    description = props.props.description;
+    language = props.props.language;
+    forksCount = props.props.forksCount;
+    stargazersCount = props.props.stargazersCount;
+    ratingAverage = props.props.ratingAverage;
+    reviewCount = props.props.reviewCount;
+    ownerAvatarUrl = props.props.ownerAvatarUrl;
+  }
+
+  // {
+  //   fullName,
+  //   description,
+  //   language,
+  //   forksCount,
+  //   stargazersCount,
+  //   ratingAverage,
+  //   reviewCount,
+  //   ownerAvatarUrl,
+  // } = props.props;
 
   return (
     <View style={styles.container} testID="repositoryItem">
@@ -154,6 +217,16 @@ export default function RepositoryItem(props) {
           </Text>
         </View>
       </View>
+      {id && (
+        <Pressable
+          style={styles.button}
+          onPress={async () => {
+            await Linking.openURL(repo.repository.url);
+          }}
+        >
+          <Text style={styles.buttonText}>Open in GitHub</Text>
+        </Pressable>
+      )}
     </View>
   );
 }

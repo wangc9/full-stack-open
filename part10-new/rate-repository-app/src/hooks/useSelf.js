@@ -7,7 +7,8 @@ export default function useSelf() {
   });
 
   return {
-    username: data.me === null ? undefined : data.me.username,
+    username:
+      data === undefined || data.me === null ? undefined : data.me.username,
     ...result,
   };
 }
