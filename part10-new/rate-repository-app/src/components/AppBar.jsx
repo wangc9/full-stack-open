@@ -14,6 +14,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
   },
+  signedIn: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
 });
 
 const AppBar = () => {
@@ -25,7 +29,10 @@ const AppBar = () => {
         {username === undefined ? (
           <AppBarTab name="Sign In" link="/sign-in" />
         ) : (
-          <SignOutButton />
+          <View style={styles.signedIn}>
+            <AppBarTab name="Create a review" link="/create-review" />
+            <SignOutButton />
+          </View>
         )}
       </ScrollView>
     </View>
