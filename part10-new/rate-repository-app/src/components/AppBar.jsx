@@ -27,7 +27,10 @@ const AppBar = () => {
       <ScrollView horizontal>
         <AppBarTab name="Repositories" link="/" />
         {username === undefined ? (
-          <AppBarTab name="Sign In" link="/sign-in" />
+          <View style={styles.signedIn}>
+            <AppBarTab name="Sign up" link="/sign-up" />
+            <AppBarTab name="Sign in" link="/sign-in" />
+          </View>
         ) : (
           <View style={styles.signedIn}>
             <AppBarTab name="Create a review" link="/create-review" />
