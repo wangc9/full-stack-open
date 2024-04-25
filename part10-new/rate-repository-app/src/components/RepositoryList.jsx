@@ -1,9 +1,10 @@
 import { FlatList, View, StyleSheet, Pressable } from 'react-native';
 import RepositoryItem from './RepositoryItem';
 import theme from '../theme';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useRepositories from '../hooks/useRepositories';
 import { useNavigate } from 'react-router-native';
+import { Picker } from '@react-native-picker/picker';
 
 const styles = StyleSheet.create({
   separator: {
@@ -14,7 +15,27 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryListContainer = ({ navigate, repositories }) => {
+function OrderPicker({ order, setOrder }) {
+  return (
+    <Picker
+      selectedValue={order}
+      onValueChange={(itemValue, itemIndex) => {
+        setOrder(itemValue);
+      }}
+    >
+      <Picker.Item label="Latest repositories" value="latest" />
+      <Picker.Item label="Highest rated repositories" value="highest" />
+      <Picker.Item label="Lowest rated repositories" value="lowest" />
+    </Picker>
+  );
+}
+
+export const RepositoryListContainer = ({
+  navigate,
+  repositories,
+  order,
+  setOrder,
+}) => {
   const repositoryNodes = repositories
     ? repositories.edges.map((edge) => edge.node)
     : [];
@@ -23,6 +44,7 @@ export const RepositoryListContainer = ({ navigate, repositories }) => {
     <FlatList
       data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
+      ListHeaderComponent={<OrderPicker order={order} setOrder={setOrder} />}
       renderItem={(item) => (
         <Pressable
           onPress={() => {
@@ -38,11 +60,17 @@ export const RepositoryListContainer = ({ navigate, repositories }) => {
 };
 
 const RepositoryList = () => {
-  const { repositories } = useRepositories();
+  const [order, setOrder] = useState('latest');
+  const { repositories } = useRepositories(order);
   const navigate = useNavigate();
 
   return (
-    <RepositoryListContainer repositories={repositories} navigate={navigate} />
+    <RepositoryListContainer
+      repositories={repositories}
+      navigate={navigate}
+      order={order}
+      setOrder={setOrder}
+    />
   );
 };
 
