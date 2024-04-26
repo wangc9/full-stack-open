@@ -52,7 +52,9 @@ export default function ReviewCard({ review }) {
         <Text style={styles.scoreText}>{review.rating}</Text>
       </View>
       <View style={styles.reviewContainer}>
-        <Text style={styles.name}>{review.user.username}</Text>
+        <Text style={styles.name}>
+          {review.user ? review.user.username : review.repository.fullName}
+        </Text>
         <Text style={styles.date}>{date}</Text>
         <Text style={styles.content}>{review.text}</Text>
       </View>

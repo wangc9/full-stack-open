@@ -72,7 +72,7 @@ export class RepositoryListContainer extends Component {
           <Pressable
             onPress={() => {
               const id = item.item.id;
-              navigate(`/${id}`);
+              props.navigate(`/${id}`);
             }}
           >
             <RepositoryItem props={item.item} />

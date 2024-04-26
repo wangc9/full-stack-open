@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
-  const { username } = useSelf();
+  const { username } = useSelf(false);
   return (
     <View style={styles.container}>
       <ScrollView horizontal>
@@ -34,6 +34,7 @@ const AppBar = () => {
         ) : (
           <View style={styles.signedIn}>
             <AppBarTab name="Create a review" link="/create-review" />
+            <AppBarTab name="My reviews" link="/my-reviews" />
             <SignOutButton />
           </View>
         )}

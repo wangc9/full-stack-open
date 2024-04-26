@@ -187,7 +187,7 @@ export function Repository({
   );
 }
 
-const ItemSeparator = () => <View style={styles.separator} />;
+export const ItemSeparator = () => <View style={styles.separator} />;
 
 export default function RepositoryItem(props) {
   let { id } = useParams();
