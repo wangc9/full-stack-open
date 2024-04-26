@@ -70,6 +70,7 @@ export const GET_SELF = gql`
             id
             repository {
               fullName
+              id
             }
             text
             rating
